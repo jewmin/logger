@@ -109,8 +109,12 @@ void Category::RemoveAllAppenders() {
 }
 
 void Category::RemoveAppender(Appender * appender) {
-	Mutex::ScopedLock lock(appenders_mutex_);
-	appender_map_->erase(appender->GetName());
+	if (appender) {
+		Mutex::ScopedLock lock(appenders_mutex_);
+		appender_map_->erase(appender->GetName());
+	} else {
+		throw std::invalid_argument("appender is nullptr");
+	}
 }
 
 void Category::CallAppenders(const Record & record) {
@@ -144,7 +148,7 @@ const Category * Category::GetParent() const {
 }
 
 void Category::_Log(Priority::Value priority, const i8 * format, va_list arguments) {
-	_Log(priority, StringUtil::Format(format, arguments));
+	_Log(priority, StringUtil::FormatVa(format, arguments));
 }
 
 void Category::_Log(Priority::Value priority, const std::string & message) {

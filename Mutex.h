@@ -30,7 +30,7 @@
 namespace Logger {
 
 template<class M>
-class LOGGER_EXTERN_TEMPLATE ScopedLock {
+class ScopedLock {
 public:
 	explicit ScopedLock(M & mutex) : mutex_(mutex) { mutex_.Lock(); }
 	virtual ~ScopedLock() { mutex_.Unlock(); }
@@ -46,7 +46,7 @@ private:
 	M & mutex_;
 };
 
-class LOGGER_EXTERN Mutex {
+class Mutex {
 public:
 	typedef ScopedLock<Mutex> ScopedLock;
 

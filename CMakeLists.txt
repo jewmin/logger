@@ -28,13 +28,37 @@ MESSAGE(STATUS "WINDOWS:" ${WINDOWS})
 MESSAGE(STATUS "LINUX:" ${LINUX})
 
 # 添加源文件
+SET(Appender
+	${PROJECT_SOURCE_DIR}/Appender/Appender.h
+	${PROJECT_SOURCE_DIR}/Appender/Appender.cc
+)
+
+SET(Layout
+	${PROJECT_SOURCE_DIR}/Layout/Layout.h
+)
+
 SET(all_srcs
+	${Appender}
+	${Layout}
 	${PROJECT_SOURCE_DIR}/Logger.h
-	${PROJECT_SOURCE_DIR}/TimeStamp.h
-	${PROJECT_SOURCE_DIR}/TimeStamp.cc
+	${PROJECT_SOURCE_DIR}/Mutex.h
 	${PROJECT_SOURCE_DIR}/StringUtil.h
 	${PROJECT_SOURCE_DIR}/StringUtil.cc
+	${PROJECT_SOURCE_DIR}/TimeStamp.h
+	${PROJECT_SOURCE_DIR}/TimeStamp.cc
+	${PROJECT_SOURCE_DIR}/Priority.h
+	${PROJECT_SOURCE_DIR}/Priority.cc
+	${PROJECT_SOURCE_DIR}/Record.h
+	${PROJECT_SOURCE_DIR}/Record.cc
+	${PROJECT_SOURCE_DIR}/Hierarchy.h
+	${PROJECT_SOURCE_DIR}/Hierarchy.cc
+	${PROJECT_SOURCE_DIR}/Category.h
+	${PROJECT_SOURCE_DIR}/Category.cc
 )
+
+# 生成目录结构
+SOURCE_GROUP(Appender FILES ${Appender})
+SOURCE_GROUP(Layout FILES ${Layout})
 
 # 设置输出目录
 SET(CMAKE_DEBUG_POSTFIX "d")
@@ -72,8 +96,15 @@ ELSE()
 	MESSAGE(STATUS "flags:" ${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS})
 ENDIF()
 
+# 第三方类库
+ADD_SUBDIRECTORY(3rd/gtest ${CMAKE_BINARY_DIR}/../gtest)
+
 # 头文件
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${GTEST_INCLUDE_DIRS})
+
+# 库目录
+LINK_DIRECTORIES(${OUTPUT_DIRECTORY})
 
 # vld
 IF(VLD)
@@ -87,11 +118,12 @@ ENDIF()
 # 生成静态库、动态库
 ADD_LIBRARY(logger-static STATIC ${all_srcs})
 ADD_LIBRARY(logger SHARED ${all_srcs})
-ADD_EXECUTABLE(logger-test Main.cc)
-TARGET_LINK_LIBRARIES(logger-test logger-static)
 IF(WINDOWS)
-	TARGET_COMPILE_DEFINITIONS(logger PRIVATE BUILDING_NET_SHARED)
-	TARGET_LINK_LIBRARIES(logger-test ${VLD_LIBRARIES})
+	TARGET_COMPILE_DEFINITIONS(logger PRIVATE BUILDING_LOGGER_SHARED)
 ELSEIF(LINUX)
 	TARGET_COMPILE_OPTIONS(logger PRIVATE -fPIC -fvisibility=hidden)
 ENDIF()
+
+
+# 添加单元测试项目
+ADD_SUBDIRECTORY(TestSuite)

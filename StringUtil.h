@@ -29,9 +29,10 @@
 
 namespace Logger {
 
-class StringUtil {
+class LOGGER_EXTERN StringUtil {
 public:
-	static std::string Format(const i8 * format, va_list args);
+	static std::string Format(const i8 * format, ...);
+	static std::string FormatVa(const i8 * format, va_list args);
 	static std::string Trim(const std::string & s);
 	static u32 Split(std::vector<std::string> & v, const std::string & s, i8 delimiter, u32 max_segments = INT_MAX);
 };

@@ -2,7 +2,16 @@
 
 namespace Logger {
 
-std::string StringUtil::Format(const i8 * format, va_list args) {
+
+std::string StringUtil::Format(const i8 * format, ...) {
+	va_list args;
+	va_start(args, format);
+	std::string s = FormatVa(format, args);
+	va_end(args);
+	return s;
+}
+
+std::string StringUtil::FormatVa(const i8 * format, va_list args) {
 	size_t size = 1024;
 	i8 * buffer = new i8[size];
 

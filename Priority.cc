@@ -11,12 +11,12 @@ const std::string * Names() {
 }
 
 const std::string & Priority::GetPriorityName(Value priority) {
-	return Names()[((priority < MinPriority) || (priority > MaxPriority)) ? MaxPriority : priority];
+	return Names()[((priority < MinPriority) || (priority > MaxPriority)) ? MinPriority : priority];
 }
 
 Priority::Value Priority::GetPriorityValue(const std::string & priority) {
 	Value value = -1;
-	for (Value i = MinPriority; i < MaxPriority; ++i) {
+	for (Value i = MinPriority; i <= MaxPriority; ++i) {
 		if (priority == Names()[i]) {
 			value = i;
 			break;
