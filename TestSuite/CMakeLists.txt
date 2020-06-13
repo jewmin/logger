@@ -8,11 +8,14 @@ PROJECT(test_suite VERSION 1.0)
 SET(test_srcs
 	${PROJECT_SOURCE_DIR}/Main.cc
 	${PROJECT_SOURCE_DIR}/MutexTest.cc
+	${PROJECT_SOURCE_DIR}/ConfigureFailureTest.cc
 	${PROJECT_SOURCE_DIR}/StringUtilTest.cc
 	${PROJECT_SOURCE_DIR}/TimeStampTest.cc
+	${PROJECT_SOURCE_DIR}/LocalTimeTest.cc
 	${PROJECT_SOURCE_DIR}/PriorityTest.cc
 	${PROJECT_SOURCE_DIR}/AppenderTest.cc
 	${PROJECT_SOURCE_DIR}/CategoryTest.cc
+	${PROJECT_SOURCE_DIR}/LayoutTest.cc
 )
 
 # 生成可执行文件

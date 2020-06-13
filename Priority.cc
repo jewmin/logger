@@ -6,7 +6,7 @@ const Priority::Value MinPriority = static_cast<Priority::Value>(Priority::kNotS
 const Priority::Value MaxPriority = static_cast<Priority::Value>(Priority::kCrash);
 
 const std::string * Names() {
-	static const std::string priority_names[] = { "NOTSET", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" };
+	static const std::string priority_names[] = { "NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "FATAL" };
 	return priority_names;
 }
 

@@ -35,6 +35,12 @@ SET(Appender
 
 SET(Layout
 	${PROJECT_SOURCE_DIR}/Layout/Layout.h
+	${PROJECT_SOURCE_DIR}/Layout/BasicLayout.h
+	${PROJECT_SOURCE_DIR}/Layout/BasicLayout.cc
+	${PROJECT_SOURCE_DIR}/Layout/SimpleLayout.h
+	${PROJECT_SOURCE_DIR}/Layout/SimpleLayout.cc
+	${PROJECT_SOURCE_DIR}/Layout/PatternLayout.h
+	${PROJECT_SOURCE_DIR}/Layout/PatternLayout.cc
 )
 
 SET(all_srcs
@@ -42,10 +48,14 @@ SET(all_srcs
 	${Layout}
 	${PROJECT_SOURCE_DIR}/Logger.h
 	${PROJECT_SOURCE_DIR}/Mutex.h
+	${PROJECT_SOURCE_DIR}/ConfigureFailure.h
+	${PROJECT_SOURCE_DIR}/ConfigureFailure.cc
 	${PROJECT_SOURCE_DIR}/StringUtil.h
 	${PROJECT_SOURCE_DIR}/StringUtil.cc
 	${PROJECT_SOURCE_DIR}/TimeStamp.h
 	${PROJECT_SOURCE_DIR}/TimeStamp.cc
+	${PROJECT_SOURCE_DIR}/LocalTime.h
+	${PROJECT_SOURCE_DIR}/LocalTime.cc
 	${PROJECT_SOURCE_DIR}/Priority.h
 	${PROJECT_SOURCE_DIR}/Priority.cc
 	${PROJECT_SOURCE_DIR}/Record.h
