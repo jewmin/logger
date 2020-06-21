@@ -56,6 +56,8 @@ SET(all_srcs
 	${PROJECT_SOURCE_DIR}/TimeStamp.cc
 	${PROJECT_SOURCE_DIR}/LocalTime.h
 	${PROJECT_SOURCE_DIR}/LocalTime.cc
+	${PROJECT_SOURCE_DIR}/Thread.h
+	${PROJECT_SOURCE_DIR}/Thread.cc
 	${PROJECT_SOURCE_DIR}/Priority.h
 	${PROJECT_SOURCE_DIR}/Priority.cc
 	${PROJECT_SOURCE_DIR}/Record.h

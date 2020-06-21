@@ -46,6 +46,7 @@
 #include <chrono>
 #include <mutex>
 #include <thread>
+#include <iostream>
 
 // C头文件
 #include <assert.h>
@@ -55,6 +56,10 @@
 #else
 #	include <unistd.h>
 #endif
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 // 定义标准类型，内部统一使用
 typedef char				i8;
@@ -66,6 +71,10 @@ typedef unsigned char		u8;
 typedef unsigned short		u16;
 typedef unsigned int		u32;
 typedef unsigned long long	u64;
+
+#ifdef _WIN32
+typedef i32					mode_t;
+#endif
 
 #ifdef _WIN32
 	/* Windows - set up dll import/export decorators. */

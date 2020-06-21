@@ -42,8 +42,6 @@ public:
 	virtual void Close() = 0;
 	virtual bool RequiresLayout() const = 0;
 	virtual void SetLayout(Layout * layout) = 0;
-	virtual void SetThreshold(Priority::Value priority) = 0;
-	virtual Priority::Value GetThreshold() = 0;
 
 	const std::string & GetName() const;
 

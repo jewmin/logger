@@ -22,31 +22,50 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Record_INCLUDED
-#define Logger_Record_INCLUDED
+#ifndef Logger_Thread_INCLUDED
+#define Logger_Thread_INCLUDED
 
-#include "Priority.h"
-#include "TimeStamp.h"
+#include "Logger.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN Record {
+class LOGGER_EXTERN Thread {
 public:
-	Record(const std::string & category, const std::string & message, Priority::Value priority);
-	Record(const Record & rhs);
-	virtual ~Record();
+	virtual ~Thread();
+
+	void Start();
+	void Terminate();
+	bool Terminated() const;
+	std::thread::id GetThreadId() const;
+
+protected:
+	Thread();
+	virtual void OnRountine() = 0;
+	virtual void OnTerminated() = 0;
 
 private:
-	Record(Record &&) = delete;
-	Record & operator=(Record &&) = delete;
-	Record & operator=(const Record &) = delete;
+	static void ThreadRoutine(Thread * thread);
 
-public:
-	const std::string category_;
-	const std::string message_;
-	const Priority::Value priority_;
-	TimeStamp time_stamp_;
+private:
+	std::thread * thread_;
+	bool terminated_;
 };
+
+inline void Thread::Terminate() {
+	terminated_ = true;
+}
+
+inline bool Thread::Terminated() const {
+	return terminated_;
+}
+
+inline std::thread::id Thread::GetThreadId() const {
+	if (thread_) {
+		return thread_->get_id();
+	} else {
+		return std::thread::id();
+	}
+}
 
 }
 

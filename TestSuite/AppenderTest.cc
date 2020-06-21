@@ -4,7 +4,7 @@
 
 class MockAppender : public Logger::Appender {
 public:
-	MockAppender(const std::string & name) : Logger::Appender(name), priority_(Logger::Priority::kNotSet) {
+	MockAppender(const std::string & name) : Logger::Appender(name) {
 	}
 
 	virtual ~MockAppender() {
@@ -29,17 +29,6 @@ public:
 
 	virtual void SetLayout(Logger::Layout * layout) override {
 	}
-
-	virtual void SetThreshold(Logger::Priority::Value priority) override {
-		priority_ = priority;
-	}
-
-	virtual Logger::Priority::Value GetThreshold() override {
-		return priority_;
-	}
-
-private:
-	Logger::Priority::Value priority_;
 };
 
 class AppenderTest : public testing::Test {
