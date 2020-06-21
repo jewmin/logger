@@ -2,7 +2,7 @@
 
 namespace Logger {
 
-FileAppender::FileAppender(const std::string & name, const std::string & file_name, bool append = true, mode_t mode = 00644)
+FileAppender::FileAppender(const std::string & name, const std::string & file_name, bool append, mode_t mode)
 	: LayoutAppender(name), file_name_(file_name), flags_(O_CREAT | O_APPEND | O_WRONLY), mode_(mode) {
 	if (!append) {
 		flags_ |= O_TRUNC;
@@ -61,7 +61,7 @@ mode_t FileAppender::GetMode() const {
 
 void FileAppender::_Append(const Record & record) {
 	std::string message(GetLayout()->Format(record));
-	::write(fd_, message.data(), message.length());
+	::write(fd_, message.data(), static_cast<u32>(message.length()));
 }
 
 }

@@ -31,6 +31,16 @@ MESSAGE(STATUS "LINUX:" ${LINUX})
 SET(Appender
 	${PROJECT_SOURCE_DIR}/Appender/Appender.h
 	${PROJECT_SOURCE_DIR}/Appender/Appender.cc
+	${PROJECT_SOURCE_DIR}/Appender/AppenderSkeleton.cc
+	${PROJECT_SOURCE_DIR}/Appender/AppenderSkeleton.h
+	${PROJECT_SOURCE_DIR}/Appender/LayoutAppender.cc
+	${PROJECT_SOURCE_DIR}/Appender/LayoutAppender.h
+	${PROJECT_SOURCE_DIR}/Appender/FileAppender.h
+	${PROJECT_SOURCE_DIR}/Appender/FileAppender.cc
+	${PROJECT_SOURCE_DIR}/Appender/RollingFileAppender.h
+	${PROJECT_SOURCE_DIR}/Appender/RollingFileAppender.cc
+	${PROJECT_SOURCE_DIR}/Appender/DailyRollingFileAppender.h
+	${PROJECT_SOURCE_DIR}/Appender/DailyRollingFileAppender.cc
 )
 
 SET(Layout

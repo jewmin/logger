@@ -41,11 +41,11 @@ TEST(ThreadTest, multi) {
 		t[i] = new MockThread(i * 5);
 		t[i]->Start();
 	}
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	for (i32 i = 0; i < 10; ++i) {
 		t[i]->Terminate();
 	}
-	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::milliseconds(300));
 	for (i32 i = 0; i < 10; ++i) {
 		delete t[i];
 	}

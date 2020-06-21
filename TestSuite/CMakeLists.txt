@@ -17,6 +17,7 @@ SET(test_srcs
 	${PROJECT_SOURCE_DIR}/CategoryTest.cc
 	${PROJECT_SOURCE_DIR}/LayoutTest.cc
 	${PROJECT_SOURCE_DIR}/ThreadTest.cc
+	${PROJECT_SOURCE_DIR}/FileAppenderTest.cc
 )
 
 # 生成可执行文件
