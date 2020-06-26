@@ -146,6 +146,5 @@ ELSEIF(LINUX)
 	TARGET_COMPILE_OPTIONS(logger PRIVATE -fPIC -fvisibility=hidden)
 ENDIF()
 
-
 # 添加单元测试项目
 ADD_SUBDIRECTORY(TestSuite)

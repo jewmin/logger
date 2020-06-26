@@ -8,13 +8,9 @@ public:
 protected:
 	virtual void OnRountine() override {
 		while (!Terminated()) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(milli_seconds_));
+			Logger::Thread::Sleep(milli_seconds_);
 			std::cout << "OnRountine: " << GetThreadId() << std::endl;
 		}
-	}
-
-	virtual void OnTerminated() override {
-		std::cout << "OnTerminated: " << GetThreadId() << std::endl;
 	}
 
 private:
@@ -38,15 +34,19 @@ TEST(ThreadTest, id) {
 TEST(ThreadTest, multi) {
 	MockThread * t[10];
 	for (i32 i = 0; i < 10; ++i) {
-		t[i] = new MockThread(i * 5);
+		t[i] = new MockThread((i + 1) * 5);
 		t[i]->Start();
 	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(200));
-	for (i32 i = 0; i < 10; ++i) {
+	Logger::Thread::Sleep(200);
+	for (i32 i = 0; i < 5; ++i) {
 		t[i]->Terminate();
 	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(300));
+	Logger::Thread::Sleep(300);
 	for (i32 i = 0; i < 10; ++i) {
 		delete t[i];
 	}
+}
+
+TEST(ThreadTest, current_id) {
+	std::cout << "id: " << Logger::Thread::CurrentThreadId() << std::endl;
 }

@@ -21,7 +21,14 @@ void Thread::Start() {
 
 void Thread::ThreadRoutine(Thread * thread) {
 	thread->OnRountine();
-	thread->OnTerminated();
+}
+
+void Thread::Sleep(i32 milliseconds) {
+	std::this_thread::sleep_for(std::chrono::microseconds(milliseconds));
+}
+
+std::thread::id Thread::CurrentThreadId() {
+	return std::this_thread::get_id();
 }
 
 }

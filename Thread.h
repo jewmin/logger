@@ -38,10 +38,12 @@ public:
 	bool Terminated() const;
 	std::thread::id GetThreadId() const;
 
+	static void Sleep(i32 milliseconds);
+	static std::thread::id CurrentThreadId();
+
 protected:
 	Thread();
 	virtual void OnRountine() = 0;
-	virtual void OnTerminated() = 0;
 
 private:
 	static void ThreadRoutine(Thread * thread);
