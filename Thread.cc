@@ -6,16 +6,21 @@ Thread::Thread() : thread_(nullptr), terminated_(false) {
 }
 
 Thread::~Thread() {
-	if (thread_) {
-		Terminate();
-		thread_->join();
-		delete thread_;
-	}
+	Wait();
 }
 
 void Thread::Start() {
 	if (!thread_) {
 		thread_ = new std::thread(ThreadRoutine, this);
+	}
+}
+
+void Thread::Wait() {
+	if (thread_) {
+		Terminate();
+		thread_->join();
+		delete thread_;
+		thread_ = nullptr;
 	}
 }
 

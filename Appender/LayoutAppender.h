@@ -32,7 +32,7 @@ namespace Logger {
 
 class LOGGER_EXTERN LayoutAppender : public AppenderSkeleton {
 public:
-	LayoutAppender(const std::string & name);
+	LayoutAppender(const std::string & name, bool async_log = false);
 	virtual ~LayoutAppender();
 
 	virtual bool RequiresLayout() const override;

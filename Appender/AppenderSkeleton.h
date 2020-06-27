@@ -26,10 +26,12 @@
 #define Logger_Appender_AppenderSkeleton_INCLUDED
 
 #include "Appender/Appender.h"
+#include "Thread.h"
+#include "Mutex.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN AppenderSkeleton : public Appender {
+class LOGGER_EXTERN AppenderSkeleton : public Appender, public Thread {
 public:
 	virtual ~AppenderSkeleton();
 
@@ -37,9 +39,16 @@ public:
 	virtual bool ReOpen() override;
 
 protected:
-	AppenderSkeleton(const std::string & name);
+	AppenderSkeleton(const std::string & name, bool async_log = false);
 
+	void _DoAppend();
+	virtual void OnRountine() override;
 	virtual void _Append(const Record & record) = 0;
+
+private:
+	bool async_log_;
+	Mutex record_mutex_;
+	std::vector<Record *> record_vec_;
 };
 
 }

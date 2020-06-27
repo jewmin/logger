@@ -6,6 +6,27 @@
 #include "Appender/RollingFileAppender.h"
 #include "Layout/SimpleLayout.h"
 
+class MockAsyncAppender : public Logger::AppenderSkeleton {
+public:
+	MockAsyncAppender() : Logger::AppenderSkeleton("MockAsyncAppender", true) {}
+	virtual ~MockAsyncAppender() {}
+	virtual void _Append(const Logger::Record & record) override {
+		std::printf("%s: %s\n", record.category_.c_str(), record.message_.c_str());
+	}
+	virtual void Close() override {
+	}
+	virtual bool RequiresLayout() const override {
+		return false;
+	}
+	virtual void SetLayout(Logger::Layout * layout) override {
+	}
+};
+
+TEST(MockAsyncAppenderTest, async) {
+	MockAsyncAppender async;
+	async.DoAppend(Logger::Record("MockAsyncAppenderTest", "this is a appender skeleton message", Logger::Priority::kInfo));
+}
+
 TEST(FileAppenderTest, use) {
 	i32 fd = ::open("test.log", O_CREAT | O_APPEND | O_WRONLY, 00644);
 	Logger::FileAppender file("FileAppenderTest", fd);
@@ -14,6 +35,19 @@ TEST(FileAppenderTest, use) {
 TEST(FileAppenderTest, reopen) {
 	Logger::FileAppender file("FileAppenderTest", "test.log");
 	file.ReOpen();
+}
+
+TEST(FileAppenderTest, async) {
+	Logger::FileAppender file("FileAppenderTest", "async_test.log", true);
+	file.DoAppend(Logger::Record("FileAppenderTest", "this is a file test message", Logger::Priority::kInfo));
+	Logger::Thread::Sleep(100);
+	file.Wait();
+	file.DoAppend(Logger::Record("FileAppenderTest", "this is a file test message after thread join", Logger::Priority::kWarning));
+}
+
+TEST(FileAppenderTest, wait) {
+	Logger::FileAppender file("FileAppenderTest", "async_test.log", true);
+	file.DoAppend(Logger::Record("FileAppenderTest", "this is a wait file test message", Logger::Priority::kInfo));
 }
 
 TEST(DailyRollingFileAppenderTest, use) {
@@ -27,7 +61,7 @@ TEST(DailyRollingFileAppenderTest, use) {
 }
 
 TEST(DailyRollingFileAppenderTest, layout) {
-	Logger::DailyRollingFileAppender daily("DailyRollingFileAppenderTest", "dailytest.log", false);
+	Logger::DailyRollingFileAppender daily("DailyRollingFileAppenderTest", "dailytest.log", false, false);
 	EXPECT_EQ(daily.RequiresLayout(), true);
 	daily.SetLayout(nullptr);
 	daily.SetLayout(new Logger::SimpleLayout());
@@ -42,8 +76,21 @@ TEST(DailyRollingFileAppenderTest, log) {
 	daily.DoAppend(record);
 }
 
+TEST(DailyRollingFileAppenderTest, async) {
+	Logger::DailyRollingFileAppender daily("DailyRollingFileAppenderTest", "async_dailytest.log", true);
+	daily.DoAppend(Logger::Record("DailyCategory", "this is a async daily rolling test message", Logger::Priority::kInfo));
+	Logger::Thread::Sleep(100);
+	daily.Wait();
+	daily.DoAppend(Logger::Record("DailyCategory", "this is a async daily rolling test message after thread join", Logger::Priority::kWarning));
+}
+
+TEST(DailyRollingFileAppenderTest, wait) {
+	Logger::DailyRollingFileAppender daily("DailyRollingFileAppenderTest", "async_dailytest.log", true);
+	daily.DoAppend(Logger::Record("DailyCategory", "this is a wait daily rolling test message", Logger::Priority::kInfo));
+}
+
 TEST(RollingFileAppenderTest, use) {
-	Logger::RollingFileAppender roll("RollingFileAppenderTest", "rolltest.log", 30, 3);
+	Logger::RollingFileAppender roll("RollingFileAppenderTest", "rolltest.log", false, 30, 3);
 	EXPECT_EQ(roll.GetAppend(), true);
 	EXPECT_EQ(roll.GetMode(), 00644);
 	EXPECT_EQ(roll.GetMaxBackupIndex(), 3);
@@ -60,7 +107,23 @@ TEST(RollingFileAppenderTest, use) {
 }
 
 TEST(RollingFileAppenderTest, log) {
-	Logger::RollingFileAppender roll("RollingFileAppenderTest", "rolltest.log", 30, 3);
+	Logger::RollingFileAppender roll("RollingFileAppenderTest", "rolltest.log", false, 30, 3);
 	roll.DoAppend(Logger::Record("RollCategory", "this is a rolling test message", Logger::Priority::kDebug));
 	roll.DoAppend(Logger::Record("RollCategory", "this is a other rolling test message", Logger::Priority::kWarning));
+}
+
+TEST(RollingFileAppenderTest, async) {
+	Logger::RollingFileAppender roll("RollingFileAppenderTest", "async_rolltest.log", true, 30, 3);
+	roll.DoAppend(Logger::Record("RollCategory", "this is a async rolling test message", Logger::Priority::kDebug));
+	roll.DoAppend(Logger::Record("RollCategory", "this is a async other rolling test message", Logger::Priority::kWarning));
+	Logger::Thread::Sleep(100);
+	roll.Wait();
+	roll.DoAppend(Logger::Record("RollCategory", "this is a async rolling test message after thread join", Logger::Priority::kInfo));
+	roll.DoAppend(Logger::Record("RollCategory", "this is a async other rolling test message after thread join", Logger::Priority::kError));
+}
+
+TEST(RollingFileAppenderTest, wait) {
+	Logger::RollingFileAppender roll("RollingFileAppenderTest", "async_rolltest.log", true, 30, 3);
+	roll.DoAppend(Logger::Record("RollCategory", "this is a wait rolling test message", Logger::Priority::kDebug));
+	roll.DoAppend(Logger::Record("RollCategory", "this is a wait other rolling test message", Logger::Priority::kWarning));
 }

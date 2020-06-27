@@ -34,6 +34,7 @@ public:
 	virtual ~Thread();
 
 	void Start();
+	void Wait();
 	void Terminate();
 	bool Terminated() const;
 	std::thread::id GetThreadId() const;

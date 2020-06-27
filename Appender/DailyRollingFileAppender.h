@@ -32,7 +32,7 @@ namespace Logger {
 
 class LOGGER_EXTERN DailyRollingFileAppender : public FileAppender {
 public:
-	DailyRollingFileAppender(const std::string & name, const std::string & file_name, bool append = true, mode_t mode = 00644);
+	DailyRollingFileAppender(const std::string & name, const std::string & file_name, bool async_log = false, bool append = true, mode_t mode = 00644);
 	virtual ~DailyRollingFileAppender();
 
 	virtual void RollOver();

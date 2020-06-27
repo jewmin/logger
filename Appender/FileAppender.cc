@@ -2,19 +2,21 @@
 
 namespace Logger {
 
-FileAppender::FileAppender(const std::string & name, const std::string & file_name, bool append, mode_t mode)
-	: LayoutAppender(name), file_name_(file_name), flags_(O_CREAT | O_APPEND | O_WRONLY), mode_(mode) {
+FileAppender::FileAppender(const std::string & name, const std::string & file_name, bool async_log, bool append, mode_t mode)
+	: LayoutAppender(name, async_log), file_name_(file_name), flags_(O_CREAT | O_APPEND | O_WRONLY), mode_(mode) {
 	if (!append) {
 		flags_ |= O_TRUNC;
 	}
 	fd_ = ::open(file_name_.c_str(), flags_, mode_);
 }
 
-FileAppender::FileAppender(const std::string & name, i32 fd)
-	: LayoutAppender(name), file_name_(""), fd_(fd), flags_(O_CREAT | O_APPEND | O_WRONLY), mode_(00644) {
+FileAppender::FileAppender(const std::string & name, i32 fd, bool async_log)
+	: LayoutAppender(name, async_log), file_name_(""), fd_(fd), flags_(O_CREAT | O_APPEND | O_WRONLY), mode_(00644) {
 }
 
 FileAppender::~FileAppender() {
+	Wait();
+	_DoAppend();
 	Close();
 }
 

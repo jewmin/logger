@@ -4,8 +4,8 @@
 
 namespace Logger {
 
-DailyRollingFileAppender::DailyRollingFileAppender(const std::string & name, const std::string & file_name, bool append, mode_t mode)
-	: FileAppender(name, file_name, append, mode) {
+DailyRollingFileAppender::DailyRollingFileAppender(const std::string & name, const std::string & file_name, bool async_log, bool append, mode_t mode)
+	: FileAppender(name, file_name, async_log, append, mode) {
 	std::time_t t;
 	struct stat buf;
 	if (::stat(file_name_.c_str(), &buf) != 0) {
@@ -17,6 +17,8 @@ DailyRollingFileAppender::DailyRollingFileAppender(const std::string & name, con
 }
 
 DailyRollingFileAppender::~DailyRollingFileAppender() {
+	Wait();
+	_DoAppend();
 }
 
 void DailyRollingFileAppender::RollOver() {

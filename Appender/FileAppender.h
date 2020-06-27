@@ -31,8 +31,8 @@ namespace Logger {
 
 class LOGGER_EXTERN FileAppender : public LayoutAppender {
 public:
-	FileAppender(const std::string & name, const std::string & file_name, bool append = true, mode_t mode = 00644);
-	FileAppender(const std::string & name, i32 fd);
+	FileAppender(const std::string & name, const std::string & file_name, bool async_log = false, bool append = true, mode_t mode = 00644);
+	FileAppender(const std::string & name, i32 fd, bool async_log = false);
 	virtual ~FileAppender();
 	
 	virtual bool ReOpen() override;

@@ -32,7 +32,7 @@ namespace Logger {
 
 class LOGGER_EXTERN RollingFileAppender : public FileAppender {
 public:
-	RollingFileAppender(const std::string & name, const std::string & file_name, size_t max_file_size = 10 * 1024 * 1024, i32 max_backup_index = 1, bool append = true, mode_t mode = 00644);
+	RollingFileAppender(const std::string & name, const std::string & file_name, bool async_log = false, size_t max_file_size = 10 * 1024 * 1024, i32 max_backup_index = 1, bool append = true, mode_t mode = 00644);
 	virtual ~RollingFileAppender();
 
 	virtual void SetMaxBackupIndex(i32 max_backup_index);

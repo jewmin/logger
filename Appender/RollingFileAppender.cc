@@ -4,11 +4,13 @@
 
 namespace Logger {
 
-RollingFileAppender::RollingFileAppender(const std::string & name, const std::string & file_name, size_t max_file_size, i32 max_backup_index, bool append, mode_t mode)
-	: FileAppender(name, file_name, append, mode), max_file_size_(max_file_size), max_backup_index_(max_backup_index > 0 ? max_backup_index : 1) {
+RollingFileAppender::RollingFileAppender(const std::string & name, const std::string & file_name, bool async_log, size_t max_file_size, i32 max_backup_index, bool append, mode_t mode)
+	: FileAppender(name, file_name, async_log, append, mode), max_file_size_(max_file_size), max_backup_index_(max_backup_index > 0 ? max_backup_index : 1) {
 }
 
 RollingFileAppender::~RollingFileAppender() {
+	Wait();
+	_DoAppend();
 }
 
 void RollingFileAppender::SetMaxBackupIndex(i32 max_backup_index) {
