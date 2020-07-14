@@ -193,17 +193,17 @@ void Category::Debug(const std::string & message) {
 }
 
 void Category::Info(const i8 * format, ...) {
-	if (IsDebugEnabled()) {
+	if (IsInfoEnabled()) {
 		va_list va;
 		va_start(va, format);
-		_Log(Priority::kDebug, format, va);
+		_Log(Priority::kInfo, format, va);
 		va_end(va);
 	}
 }
 
 void Category::Info(const std::string & message) {
-	if (IsDebugEnabled()) {
-		_Log(Priority::kDebug, message);
+	if (IsInfoEnabled()) {
+		_Log(Priority::kInfo, message);
 	}
 }
 

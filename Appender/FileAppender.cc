@@ -63,7 +63,9 @@ mode_t FileAppender::GetMode() const {
 
 void FileAppender::_Append(const Record & record) {
 	std::string message(GetLayout()->Format(record));
-	::write(fd_, message.data(), static_cast<u32>(message.length()));
+	if (fd_ != -1) {
+		::write(fd_, message.data(), static_cast<u32>(message.length()));
+	}
 }
 
 }

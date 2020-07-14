@@ -21,6 +21,7 @@ void Thread::Wait() {
 		thread_->join();
 		delete thread_;
 		thread_ = nullptr;
+		terminated_ = false;
 	}
 }
 

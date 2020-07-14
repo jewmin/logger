@@ -48,9 +48,11 @@ void RollingFileAppender::RollOver() {
 
 void RollingFileAppender::_Append(const Record & record) {
 	FileAppender::_Append(record);
-	off_t offset = ::lseek(fd_, 0, SEEK_END);
-	if (offset > 0 && static_cast<size_t>(offset) >= max_file_size_) {
-		RollOver();
+	if (fd_ != -1) {
+		off_t offset = ::lseek(fd_, 0, SEEK_END);
+		if (offset > 0 && static_cast<size_t>(offset) >= max_file_size_) {
+			RollOver();
+		}
 	}
 }
 

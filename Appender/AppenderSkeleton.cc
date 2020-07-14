@@ -9,10 +9,6 @@ AppenderSkeleton::AppenderSkeleton(const std::string & name, bool async_log) : A
 }
 
 AppenderSkeleton::~AppenderSkeleton() {
-	for (auto & it : record_vec_) {
-		delete it;
-	}
-	record_vec_.clear();
 }
 
 void AppenderSkeleton::DoAppend(const Record & record) {
