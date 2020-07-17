@@ -60,6 +60,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <limits.h>
 
 // 定义标准类型，内部统一使用
 typedef char				i8;

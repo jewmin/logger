@@ -55,7 +55,7 @@ TEST(StringUtilTest, split) {
 TEST(StringUtilTest, limit_split) {
 	std::vector<std::string> v;
 	Logger::StringUtil::Split(v, "192.168.1.100", '1', 3);
-	EXPECT_EQ(v.size(), 3);
+	EXPECT_EQ(v.size(), 3u);
 	EXPECT_STREQ(v[0].c_str(), "");
 	EXPECT_STREQ(v[1].c_str(), "92.");
 	EXPECT_STREQ(v[2].c_str(), "68.1.100");

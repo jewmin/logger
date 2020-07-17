@@ -53,11 +53,11 @@ TEST(FileAppenderTest, wait) {
 TEST(DailyRollingFileAppenderTest, use) {
 	Logger::DailyRollingFileAppender daily("DailyRollingFileAppenderTest", "dailytest.log");
 	EXPECT_EQ(daily.GetAppend(), true);
-	EXPECT_EQ(daily.GetMode(), 00644);
+	EXPECT_EQ(daily.GetMode(), (mode_t)00644);
 	daily.SetAppend(false);
 	daily.SetMode(00777);
 	EXPECT_EQ(daily.GetAppend(), false);
-	EXPECT_EQ(daily.GetMode(), 00777);
+	EXPECT_EQ(daily.GetMode(), (mode_t)00777);
 }
 
 TEST(DailyRollingFileAppenderTest, layout) {
@@ -92,17 +92,17 @@ TEST(DailyRollingFileAppenderTest, wait) {
 TEST(RollingFileAppenderTest, use) {
 	Logger::RollingFileAppender roll("RollingFileAppenderTest", "rolltest.log", false, 30, 3);
 	EXPECT_EQ(roll.GetAppend(), true);
-	EXPECT_EQ(roll.GetMode(), 00644);
+	EXPECT_EQ(roll.GetMode(), (mode_t)00644);
 	EXPECT_EQ(roll.GetMaxBackupIndex(), 3);
-	EXPECT_EQ(roll.GetMaxFileSize(), 30);
+	EXPECT_EQ(roll.GetMaxFileSize(), 30u);
 	roll.SetAppend(false);
 	roll.SetMode(00777);
 	roll.SetMaxBackupIndex(4);
 	roll.SetMaximumFileSize(45);
 	EXPECT_EQ(roll.GetAppend(), false);
-	EXPECT_EQ(roll.GetMode(), 00777);
+	EXPECT_EQ(roll.GetMode(), (mode_t)00777);
 	EXPECT_EQ(roll.GetMaxBackupIndex(), 4);
-	EXPECT_EQ(roll.GetMaxFileSize(), 45);
+	EXPECT_EQ(roll.GetMaxFileSize(), 45u);
 	roll.SetAppend(true);
 }
 

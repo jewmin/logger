@@ -30,17 +30,17 @@
 namespace Logger {
 
 template<class M>
-class ScopedLock {
+class MutexScopedLock {
 public:
-	explicit ScopedLock(M & mutex) : mutex_(mutex) { mutex_.Lock(); }
-	virtual ~ScopedLock() { mutex_.Unlock(); }
+	explicit MutexScopedLock(M & mutex) : mutex_(mutex) { mutex_.Lock(); }
+	virtual ~MutexScopedLock() { mutex_.Unlock(); }
 
 private:
-	ScopedLock() = delete;
-	ScopedLock(ScopedLock &&) = delete;
-	ScopedLock(const ScopedLock &) = delete;
-	ScopedLock & operator=(ScopedLock &&) = delete;
-	ScopedLock & operator=(const ScopedLock &) = delete;
+	MutexScopedLock() = delete;
+	MutexScopedLock(MutexScopedLock &&) = delete;
+	MutexScopedLock(const MutexScopedLock &) = delete;
+	MutexScopedLock & operator=(MutexScopedLock &&) = delete;
+	MutexScopedLock & operator=(const MutexScopedLock &) = delete;
 
 private:
 	M & mutex_;
@@ -48,7 +48,7 @@ private:
 
 class Mutex {
 public:
-	typedef ScopedLock<Mutex> ScopedLock;
+	typedef MutexScopedLock<Mutex> ScopedLock;
 
 	Mutex() {}
 	~Mutex() {}

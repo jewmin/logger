@@ -31,6 +31,7 @@ namespace Logger {
 
 class LOGGER_EXTERN Layout {
 public:
+	virtual ~Layout() {}
 	virtual std::string Format(const Record & record) = 0;
 };
 
