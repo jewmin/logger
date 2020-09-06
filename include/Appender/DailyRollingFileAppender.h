@@ -22,33 +22,26 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Appender_AppenderSkeleton_INCLUDED
-#define Logger_Appender_AppenderSkeleton_INCLUDED
+#ifndef Logger_Appender_DailyRollingFileAppender_INCLUDED
+#define Logger_Appender_DailyRollingFileAppender_INCLUDED
 
-#include "Appender/Appender.h"
-#include "Thread.h"
-#include "Mutex.h"
+#include "Appender/FileAppender.h"
+#include "TimeStamp.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN AppenderSkeleton : public Appender, public Thread {
+class COMMON_EXTERN DailyRollingFileAppender : public FileAppender {
 public:
-	virtual ~AppenderSkeleton();
+	DailyRollingFileAppender(const std::string & name, const std::string & file_name, bool async_log = false, bool append = true, mode_t mode = 00644);
+	virtual ~DailyRollingFileAppender();
 
-	virtual void DoAppend(const Record & record) override;
-	virtual bool ReOpen() override;
+	virtual void RollOver();
 
 protected:
-	AppenderSkeleton(const std::string & name, bool async_log = false);
-
-	void _DoAppend();
-	virtual void OnRountine() override;
-	virtual void _Append(const Record & record) = 0;
+	virtual void _Append(const Record & record) override;
 
 private:
-	bool async_log_;
-	Mutex record_mutex_;
-	std::vector<Record *> record_vec_;
+	struct std::tm log_time_;
 };
 
 }

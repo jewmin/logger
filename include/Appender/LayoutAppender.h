@@ -22,32 +22,32 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Appender_RollingFileAppender_INCLUDED
-#define Logger_Appender_RollingFileAppender_INCLUDED
+#ifndef Logger_Appender_LayoutAppender_INCLUDED
+#define Logger_Appender_LayoutAppender_INCLUDED
 
-#include "Appender/FileAppender.h"
-#include "TimeStamp.h"
+#include "Appender/AppenderSkeleton.h"
+#include "Layout/Layout.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN RollingFileAppender : public FileAppender {
+class COMMON_EXTERN LayoutAppender : public AppenderSkeleton {
 public:
-	RollingFileAppender(const std::string & name, const std::string & file_name, bool async_log = false, size_t max_file_size = 10 * 1024 * 1024, i32 max_backup_index = 1, bool append = true, mode_t mode = 00644);
-	virtual ~RollingFileAppender();
+	LayoutAppender(const std::string & name, bool async_log = false);
+	virtual ~LayoutAppender();
 
-	virtual void SetMaxBackupIndex(i32 max_backup_index);
-	virtual i32 GetMaxBackupIndex() const;
-	virtual void SetMaximumFileSize(size_t max_file_size);
-	virtual size_t GetMaxFileSize() const;
-	virtual void RollOver();
+	virtual bool RequiresLayout() const override;
+	virtual void SetLayout(Layout * layout = nullptr) override;
 
 protected:
-	virtual void _Append(const Record & record) override;
+	Layout * GetLayout() const;
 
 private:
-	size_t max_file_size_;
-	i32 max_backup_index_;
+	Layout * layout_;
 };
+
+inline Layout * LayoutAppender::GetLayout() const {
+	return layout_;
+}
 
 }
 

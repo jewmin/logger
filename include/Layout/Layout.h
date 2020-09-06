@@ -22,26 +22,27 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Appender_DailyRollingFileAppender_INCLUDED
-#define Logger_Appender_DailyRollingFileAppender_INCLUDED
+#ifndef Logger_Layout_Layout_INCLUDED
+#define Logger_Layout_Layout_INCLUDED
 
-#include "Appender/FileAppender.h"
-#include "TimeStamp.h"
+#include "Common.h"
+#include "CObject.h"
+#include "Record.h"
+#include "SDString.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN DailyRollingFileAppender : public FileAppender {
+class COMMON_EXTERN Layout : public Common::CObject {
 public:
-	DailyRollingFileAppender(const std::string & name, const std::string & file_name, bool async_log = false, bool append = true, mode_t mode = 00644);
-	virtual ~DailyRollingFileAppender();
-
-	virtual void RollOver();
-
-protected:
-	virtual void _Append(const Record & record) override;
+	Layout() {}
+	virtual ~Layout() {}
+	virtual Common::SDString Format(const Record & record) = 0;
 
 private:
-	struct std::tm log_time_;
+	Layout(Layout &&) = delete;
+	Layout(const Layout &) = delete;
+	Layout & operator=(Layout &&) = delete;
+	Layout & operator=(const Layout &) = delete;
 };
 
 }

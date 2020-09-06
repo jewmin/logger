@@ -22,20 +22,22 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Priority_INCLUDED
-#define Logger_Priority_INCLUDED
+#ifndef Logger_Layout_BasicLayout_INCLUDED
+#define Logger_Layout_BasicLayout_INCLUDED
 
-#include "Logger.h"
+#include "Common.h"
+#include "Record.h"
+#include "SDString.h"
+#include "Layout/Layout.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN Priority {
+class COMMON_EXTERN BasicLayout : public Layout {
 public:
-	typedef enum { kNotSet, kDebug, kInfo, kWarn, kWarning = kWarn, kError, kFatal, kCrash = kFatal } PriorityLevel;
-	typedef i32 Value;
+	BasicLayout();
+	virtual ~BasicLayout();
 
-	static const std::string & GetPriorityName(Value priority);
-	static Value GetPriorityValue(const std::string & priority);
+	virtual Common::SDString Format(const Record & record) override;
 };
 
 }

@@ -25,27 +25,31 @@
 #ifndef Logger_Record_INCLUDED
 #define Logger_Record_INCLUDED
 
+#include "Common.h"
+#include "CObject.h"
 #include "Priority.h"
+#include "SDString.h"
 #include "TimeStamp.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN Record {
+class COMMON_EXTERN Record : public Common::CObject {
 public:
-	Record(const std::string & category, const std::string & message, Priority::Value priority);
-	Record(const Record & rhs);
-	virtual ~Record();
+	Record(const i8 * category, const i8 * message, Priority::Value priority);
+	Record(Record && other);
+	Record(const Record & other);
+	~Record();
 
 private:
-	Record(Record &&) = delete;
+	Record() = delete;
 	Record & operator=(Record &&) = delete;
 	Record & operator=(const Record &) = delete;
 
 public:
-	const std::string category_;
-	const std::string message_;
+	const Common::SDString category_;
+	const Common::SDString message_;
 	const Priority::Value priority_;
-	TimeStamp time_stamp_;
+	Common::TimeStamp time_stamp_;
 };
 
 }

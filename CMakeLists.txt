@@ -9,7 +9,7 @@ OPTION(VLD "use Visual Leak Detector to check memory on windows" ON)
 OPTION(RELEASE "compile the release version" OFF)
 
 # 设置模块路径
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/3rd/vld)
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/common/3rd/vld)
 
 # 平台
 IF(MSVC)
@@ -26,61 +26,66 @@ MESSAGE(STATUS "VLD:" ${VLD})
 MESSAGE(STATUS "RELEASE:" ${RELEASE})
 MESSAGE(STATUS "WINDOWS:" ${WINDOWS})
 MESSAGE(STATUS "LINUX:" ${LINUX})
+MESSAGE(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
 
 # 添加源文件
-SET(Appender
-	${PROJECT_SOURCE_DIR}/Appender/Appender.h
-	${PROJECT_SOURCE_DIR}/Appender/Appender.cc
-	${PROJECT_SOURCE_DIR}/Appender/AppenderSkeleton.cc
-	${PROJECT_SOURCE_DIR}/Appender/AppenderSkeleton.h
-	${PROJECT_SOURCE_DIR}/Appender/LayoutAppender.cc
-	${PROJECT_SOURCE_DIR}/Appender/LayoutAppender.h
-	${PROJECT_SOURCE_DIR}/Appender/FileAppender.h
-	${PROJECT_SOURCE_DIR}/Appender/FileAppender.cc
-	${PROJECT_SOURCE_DIR}/Appender/RollingFileAppender.h
-	${PROJECT_SOURCE_DIR}/Appender/RollingFileAppender.cc
-	${PROJECT_SOURCE_DIR}/Appender/DailyRollingFileAppender.h
-	${PROJECT_SOURCE_DIR}/Appender/DailyRollingFileAppender.cc
-)
+# SET(Appender
+# 	${PROJECT_SOURCE_DIR}/Appender/Appender.h
+# 	${PROJECT_SOURCE_DIR}/Appender/Appender.cc
+# 	${PROJECT_SOURCE_DIR}/Appender/AppenderSkeleton.cc
+# 	${PROJECT_SOURCE_DIR}/Appender/AppenderSkeleton.h
+# 	${PROJECT_SOURCE_DIR}/Appender/LayoutAppender.cc
+# 	${PROJECT_SOURCE_DIR}/Appender/LayoutAppender.h
+# 	${PROJECT_SOURCE_DIR}/Appender/FileAppender.h
+# 	${PROJECT_SOURCE_DIR}/Appender/FileAppender.cc
+# 	${PROJECT_SOURCE_DIR}/Appender/RollingFileAppender.h
+# 	${PROJECT_SOURCE_DIR}/Appender/RollingFileAppender.cc
+# 	${PROJECT_SOURCE_DIR}/Appender/DailyRollingFileAppender.h
+# 	${PROJECT_SOURCE_DIR}/Appender/DailyRollingFileAppender.cc
+# )
 
-SET(Layout
-	${PROJECT_SOURCE_DIR}/Layout/Layout.h
-	${PROJECT_SOURCE_DIR}/Layout/BasicLayout.h
-	${PROJECT_SOURCE_DIR}/Layout/BasicLayout.cc
-	${PROJECT_SOURCE_DIR}/Layout/SimpleLayout.h
-	${PROJECT_SOURCE_DIR}/Layout/SimpleLayout.cc
-	${PROJECT_SOURCE_DIR}/Layout/PatternLayout.h
-	${PROJECT_SOURCE_DIR}/Layout/PatternLayout.cc
-)
+# SET(Layout
+# 	${PROJECT_SOURCE_DIR}/Layout/Layout.h
+# 	${PROJECT_SOURCE_DIR}/Layout/BasicLayout.h
+# 	${PROJECT_SOURCE_DIR}/Layout/BasicLayout.cc
+# 	${PROJECT_SOURCE_DIR}/Layout/SimpleLayout.h
+# 	${PROJECT_SOURCE_DIR}/Layout/SimpleLayout.cc
+# 	${PROJECT_SOURCE_DIR}/Layout/PatternLayout.h
+# 	${PROJECT_SOURCE_DIR}/Layout/PatternLayout.cc
+# )
 
-SET(all_srcs
-	${Appender}
-	${Layout}
-	${PROJECT_SOURCE_DIR}/Logger.h
-	${PROJECT_SOURCE_DIR}/Mutex.h
-	${PROJECT_SOURCE_DIR}/ConfigureFailure.h
-	${PROJECT_SOURCE_DIR}/ConfigureFailure.cc
-	${PROJECT_SOURCE_DIR}/StringUtil.h
-	${PROJECT_SOURCE_DIR}/StringUtil.cc
-	${PROJECT_SOURCE_DIR}/TimeStamp.h
-	${PROJECT_SOURCE_DIR}/TimeStamp.cc
-	${PROJECT_SOURCE_DIR}/LocalTime.h
-	${PROJECT_SOURCE_DIR}/LocalTime.cc
-	${PROJECT_SOURCE_DIR}/Thread.h
-	${PROJECT_SOURCE_DIR}/Thread.cc
-	${PROJECT_SOURCE_DIR}/Priority.h
-	${PROJECT_SOURCE_DIR}/Priority.cc
-	${PROJECT_SOURCE_DIR}/Record.h
-	${PROJECT_SOURCE_DIR}/Record.cc
-	${PROJECT_SOURCE_DIR}/Hierarchy.h
-	${PROJECT_SOURCE_DIR}/Hierarchy.cc
-	${PROJECT_SOURCE_DIR}/Category.h
-	${PROJECT_SOURCE_DIR}/Category.cc
+# SET(all_srcs
+# 	${Appender}
+# 	${Layout}
+# 	${PROJECT_SOURCE_DIR}/Logger.h
+# 	${PROJECT_SOURCE_DIR}/Mutex.h
+# 	${PROJECT_SOURCE_DIR}/ConfigureFailure.h
+# 	${PROJECT_SOURCE_DIR}/ConfigureFailure.cc
+# 	${PROJECT_SOURCE_DIR}/StringUtil.h
+# 	${PROJECT_SOURCE_DIR}/StringUtil.cc
+# 	${PROJECT_SOURCE_DIR}/TimeStamp.h
+# 	${PROJECT_SOURCE_DIR}/TimeStamp.cc
+# 	${PROJECT_SOURCE_DIR}/LocalTime.h
+# 	${PROJECT_SOURCE_DIR}/LocalTime.cc
+# 	${PROJECT_SOURCE_DIR}/Thread.h
+# 	${PROJECT_SOURCE_DIR}/Thread.cc
+# 	${PROJECT_SOURCE_DIR}/Priority.h
+# 	${PROJECT_SOURCE_DIR}/Priority.cc
+# 	${PROJECT_SOURCE_DIR}/Record.h
+# 	${PROJECT_SOURCE_DIR}/Record.cc
+# 	${PROJECT_SOURCE_DIR}/Hierarchy.h
+# 	${PROJECT_SOURCE_DIR}/Hierarchy.cc
+# 	${PROJECT_SOURCE_DIR}/Category.h
+# 	${PROJECT_SOURCE_DIR}/Category.cc
+# )
+SET(srcs
+	${PROJECT_SOURCE_DIR}/src/Priority.cc
+	${PROJECT_SOURCE_DIR}/src/Record.cc
 )
 
 # 生成目录结构
-SOURCE_GROUP(Appender FILES ${Appender})
-SOURCE_GROUP(Layout FILES ${Layout})
+# SOURCE_GROUP(Appender FILES ${Appender})
+# SOURCE_GROUP(Layout FILES ${Layout})
 
 # 设置输出目录
 SET(CMAKE_DEBUG_POSTFIX "d")
@@ -118,15 +123,8 @@ ELSE()
 	MESSAGE(STATUS "flags:" ${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS})
 ENDIF()
 
-# 第三方类库
-ADD_SUBDIRECTORY(3rd/gtest ${CMAKE_BINARY_DIR}/../gtest)
-
-# 头文件
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
-INCLUDE_DIRECTORIES(${GTEST_INCLUDE_DIRS})
-
-# 库目录
-LINK_DIRECTORIES(${OUTPUT_DIRECTORY})
+# libcommon
+ADD_SUBDIRECTORY(common)
 
 # vld
 IF(VLD)
@@ -137,14 +135,26 @@ IF(VLD)
 	ENDIF()
 ENDIF()
 
+# 头文件
+SET(LOGGER_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE PATH "logger include directory" FORCE)
+INCLUDE_DIRECTORIES(${GTEST_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${COMMON_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${LOGGER_INCLUDE_DIRS})
+
+# 库目录
+LINK_DIRECTORIES(${OUTPUT_DIRECTORY})
+
 # 生成静态库、动态库
-ADD_LIBRARY(logger-static STATIC ${all_srcs})
-ADD_LIBRARY(logger SHARED ${all_srcs})
+ADD_LIBRARY(logger-static STATIC ${srcs})
+ADD_LIBRARY(logger SHARED ${srcs})
+TARGET_LINK_LIBRARIES(logger-static common-static)
+TARGET_LINK_LIBRARIES(logger common)
 IF(WINDOWS)
-	TARGET_COMPILE_DEFINITIONS(logger PRIVATE BUILDING_LOGGER_SHARED)
+	TARGET_LINK_LIBRARIES(logger ws2_32 iphlpapi psapi userenv)
+	TARGET_COMPILE_DEFINITIONS(logger PRIVATE BUILDING_COMMON_SHARED)
 ELSEIF(LINUX)
 	TARGET_COMPILE_OPTIONS(logger PRIVATE -fPIC -fvisibility=hidden)
 ENDIF()
 
-# 添加单元测试项目
-ADD_SUBDIRECTORY(TestSuite)
+# 添加测试项目
+ADD_SUBDIRECTORY(test)

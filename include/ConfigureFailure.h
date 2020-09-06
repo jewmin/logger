@@ -22,32 +22,19 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Appender_LayoutAppender_INCLUDED
-#define Logger_Appender_LayoutAppender_INCLUDED
+#ifndef Logger_ConfigureFailure_INCLUDED
+#define Logger_ConfigureFailure_INCLUDED
 
-#include "Appender/AppenderSkeleton.h"
-#include "Layout/Layout.h"
+#include "Common.h"
+#include "CExpection.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN LayoutAppender : public AppenderSkeleton {
+class COMMON_EXTERN ConfigureFailure : public Common::CExpection {
 public:
-	LayoutAppender(const std::string & name, bool async_log = false);
-	virtual ~LayoutAppender();
-
-	virtual bool RequiresLayout() const override;
-	virtual void SetLayout(Layout * layout = nullptr) override;
-
-protected:
-	Layout * GetLayout() const;
-
-private:
-	Layout * layout_;
+	ConfigureFailure(const i8 * reason);
+	~ConfigureFailure();
 };
-
-inline Layout * LayoutAppender::GetLayout() const {
-	return layout_;
-}
 
 }
 

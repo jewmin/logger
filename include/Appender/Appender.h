@@ -31,7 +31,7 @@
 
 namespace Logger {
 
-class LOGGER_EXTERN Appender {
+class COMMON_EXTERN Appender {
 	friend class Category;
 
 public:

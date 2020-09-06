@@ -1,11 +1,10 @@
 #include "Category.h"
 #include "Hierarchy.h"
-#include "StringUtil.h"
 
 namespace Logger {
 
 Category * Category::GetRoot() {
-	return GetCategory("");
+	return GetCategory(Common::SDString(""));
 }
 
 void Category::SetRootPriority(Priority::Value priority) {
@@ -16,11 +15,11 @@ Priority::Value Category::GetRootPriority() {
 	return GetRoot()->GetPriority();
 }
 
-Category * Category::GetCategory(const std::string & name) {
+Category * Category::GetCategory(const Common::SDString & name) {
 	return Hierarchy::Get()->GetCategory(name);
 }
 
-Category * Category::GetExistingCategory(const std::string & name) {
+Category * Category::GetExistingCategory(const Common::SDString & name) {
 	return Hierarchy::Get()->GetExistingCategory(name);
 }
 
@@ -37,8 +36,8 @@ void Category::ShutdownForced() {
 //Category
 //*********************************************************************
 
-Category::Category(const std::string & name, Category * parent, Priority::Value priority)
-	: name_(name), parent_(parent), priority_(priority), is_additive_(true), appender_map_(new std::unordered_map<std::string, Appender *>()) {
+Category::Category(const Common::SDString & name, Category * parent, Priority::Value priority)
+	: name_(name), parent_(parent), priority_(priority), is_additive_(true), appender_map_(new std::unordered_map<Common::SDString, Appender *>()) {
 }
 
 Category::~Category() {
@@ -46,7 +45,7 @@ Category::~Category() {
 	delete appender_map_;
 }
 
-const std::string Category::GetName() const {
+const Common::SDString Category::GetName() const {
 	return name_;
 }
 
@@ -93,7 +92,7 @@ Appender * Category::GetAppender() const {
 	}
 }
 
-Appender * Category::GetAppender(const std::string & name) const {
+Appender * Category::GetAppender(const Common::SDString & name) const {
 	Mutex::ScopedLock lock(appenders_mutex_);
 	auto it = appender_map_->find(name);
 	if (it == appender_map_->end()) {
@@ -151,7 +150,7 @@ void Category::_Log(Priority::Value priority, const i8 * format, va_list argumen
 	_Log(priority, StringUtil::FormatVa(format, arguments));
 }
 
-void Category::_Log(Priority::Value priority, const std::string & message) {
+void Category::_Log(Priority::Value priority, const Common::SDString & message) {
 	Record record(GetName(), message, priority);
 	CallAppenders(record);
 }
@@ -165,7 +164,7 @@ void Category::Log(Priority::Value priority, const i8 * format, ...) {
 	}
 }
 
-void Category::Log(Priority::Value priority, const std::string & message) {
+void Category::Log(Priority::Value priority, const Common::SDString & message) {
 	if (IsPriorityEnabled(priority)) {
 		_Log(priority, message);
 	}
@@ -186,7 +185,7 @@ void Category::Debug(const i8 * format, ...) {
 	}
 }
 
-void Category::Debug(const std::string & message) {
+void Category::Debug(const Common::SDString & message) {
 	if (IsDebugEnabled()) {
 		_Log(Priority::kDebug, message);
 	}
@@ -201,7 +200,7 @@ void Category::Info(const i8 * format, ...) {
 	}
 }
 
-void Category::Info(const std::string & message) {
+void Category::Info(const Common::SDString & message) {
 	if (IsInfoEnabled()) {
 		_Log(Priority::kInfo, message);
 	}
@@ -216,7 +215,7 @@ void Category::Warn(const i8 * format, ...) {
 	}
 }
 
-void Category::Warn(const std::string & message) {
+void Category::Warn(const Common::SDString & message) {
 	if (IsWarnEnabled()) {
 		_Log(Priority::kWarn, message);
 	}
@@ -231,7 +230,7 @@ void Category::Error(const i8 * format, ...) {
 	}
 }
 
-void Category::Error(const std::string & message) {
+void Category::Error(const Common::SDString & message) {
 	if (IsErrorEnabled()) {
 		_Log(Priority::kError, message);
 	}
@@ -246,7 +245,7 @@ void Category::Fatal(const i8 * format, ...) {
 	}
 }
 
-void Category::Fatal(const std::string & message) {
+void Category::Fatal(const Common::SDString & message) {
 	if (IsFatalEnabled()) {
 		_Log(Priority::kFatal, message);
 	}

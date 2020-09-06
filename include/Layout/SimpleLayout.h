@@ -22,17 +22,22 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Layout_Layout_INCLUDED
-#define Logger_Layout_Layout_INCLUDED
+#ifndef Logger_Layout_SimpleLayout_INCLUDED
+#define Logger_Layout_SimpleLayout_INCLUDED
 
+#include "Common.h"
 #include "Record.h"
+#include "SDString.h"
+#include "Layout/Layout.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN Layout {
+class COMMON_EXTERN SimpleLayout : public Layout {
 public:
-	virtual ~Layout() {}
-	virtual std::string Format(const Record & record) = 0;
+	SimpleLayout();
+	virtual ~SimpleLayout();
+
+	virtual Common::SDString Format(const Record & record) override;
 };
 
 }

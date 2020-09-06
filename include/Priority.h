@@ -22,45 +22,28 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Layout_PatternLayout_INCLUDED
-#define Logger_Layout_PatternLayout_INCLUDED
+#ifndef Logger_Priority_INCLUDED
+#define Logger_Priority_INCLUDED
 
-#include "Layout/Layout.h"
+#include "Common.h"
+#include "CObject.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN PatternLayout : public Layout {
+class COMMON_EXTERN Priority : public Common::CObject {
 public:
-	PatternLayout();
-	virtual ~PatternLayout();
+	typedef enum { kUnknown = -1, kNotSet, kDebug, kInfo, kWarn, kWarning = kWarn, kError, kFatal, kCrash = kFatal } PriorityLevel;
+	typedef i32 Value;
 
-	/*
-	 * %%  百分号
-	 * %n 换行符
-	 * %c 日志类别
-	 * %m 日志消息
-	 * %p 日志级别(数字)
-	 * %P 日志级别(字符串)
-	 * %t 日志记录时间(时间戳)
-	 * %M 日志记录时间(时间戳毫秒部分)
-	 * %u 日志记录时间(从程序启动计算)
-	 * %d{%Y-%m-%d %H:%M:%S,%l} 格式化日志记录时间
-	 * %-10.20m 左对齐10~20字符 %20.50m 右对齐20~50字符
-	 */
-	virtual std::string Format(const Record & record) override;
-	virtual void SetConversionPattern(const std::string & conversion_pattern);
-	virtual std::string GetConversionPattern() const;
-	virtual void ClearConversionPattern();
-
-	class LOGGER_EXTERN PatternComponent {
-	public:
-		virtual ~PatternComponent() {}
-		virtual void Append(std::ostringstream & out, const Record & record) = 0;
-	};
+	static const i8 * GetPriorityName(Value priority);
+	static Value GetPriorityValue(const i8 * priority);
 
 private:
-	std::vector<PatternComponent *> * components_;
-	std::string conversion_pattern_;
+	Priority() = delete;
+	Priority(Priority &&) = delete;
+	Priority(const Priority &) = delete;
+	Priority & operator=(Priority &&) = delete;
+	Priority & operator=(const Priority &) = delete;
 };
 
 }

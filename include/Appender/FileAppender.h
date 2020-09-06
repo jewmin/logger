@@ -22,19 +22,35 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Layout_SimpleLayout_INCLUDED
-#define Logger_Layout_SimpleLayout_INCLUDED
+#ifndef Logger_Appender_FileAppender_INCLUDED
+#define Logger_Appender_FileAppender_INCLUDED
 
-#include "Layout/Layout.h"
+#include "Appender/LayoutAppender.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN SimpleLayout : public Layout {
+class COMMON_EXTERN FileAppender : public LayoutAppender {
 public:
-	SimpleLayout();
-	virtual ~SimpleLayout();
+	FileAppender(const std::string & name, const std::string & file_name, bool async_log = false, bool append = true, mode_t mode = 00644);
+	FileAppender(const std::string & name, i32 fd, bool async_log = false);
+	virtual ~FileAppender();
+	
+	virtual bool ReOpen() override;
+	virtual void Close() override;
 
-	virtual std::string Format(const Record & record) override;
+	virtual void SetAppend(bool append);
+	virtual bool GetAppend() const;
+	virtual void SetMode(mode_t mode);
+	virtual mode_t GetMode() const;
+
+protected:
+	virtual void _Append(const Record & record) override;
+
+protected:
+	const std::string file_name_;
+	i32 fd_;
+	i32 flags_;
+	mode_t mode_;
 };
 
 }

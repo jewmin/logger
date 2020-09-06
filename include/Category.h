@@ -25,18 +25,20 @@
 #ifndef Logger_Category_INCLUDED
 #define Logger_Category_INCLUDED
 
+#include "Common.h"
 #include "Priority.h"
+#include "SDString.h"
 #include "Appender/Appender.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN Category {
+class COMMON_EXTERN Category {
 	friend class Hierarchy;
 
 public:
 	virtual ~Category();
 
-	virtual const std::string GetName() const;
+	virtual const Common::SDString GetName() const;
 	virtual void SetPriority(Priority::Value priority);
 	virtual Priority::Value GetPriority() const;
 	virtual Priority::Value GetChainedPriority() const;
@@ -44,7 +46,7 @@ public:
 
 	virtual void AddAppender(Appender * appender);
 	virtual Appender * GetAppender() const;
-	virtual Appender * GetAppender(const std::string & name) const;
+	virtual Appender * GetAppender(const Common::SDString & name) const;
 	virtual void RemoveAllAppenders();
 	virtual void RemoveAppender(Appender * appender);
 	virtual void CallAppenders(const Record & record);
@@ -53,41 +55,41 @@ public:
 	virtual Category * GetParent();
 	virtual const Category * GetParent() const;
 	virtual void Log(Priority::Value priority, const i8 * format, ...);
-	virtual void Log(Priority::Value priority, const std::string & message);
+	virtual void Log(Priority::Value priority, const Common::SDString & message);
 	virtual void LogVa(Priority::Value priority, const i8 * format, va_list va);
 
 	void Debug(const i8 * format, ...);
-	void Debug(const std::string & message);
+	void Debug(const Common::SDString & message);
 	bool IsDebugEnabled() const;
 
 	void Info(const i8 * format, ...);
-	void Info(const std::string & message);
+	void Info(const Common::SDString & message);
 	bool IsInfoEnabled() const;
 
 	void Warn(const i8 * format, ...);
-	void Warn(const std::string & message);
+	void Warn(const Common::SDString & message);
 	bool IsWarnEnabled() const;
 
 	void Error(const i8 * format, ...);
-	void Error(const std::string & message);
+	void Error(const Common::SDString & message);
 	bool IsErrorEnabled() const;
 
 	void Fatal(const i8 * format, ...);
-	void Fatal(const std::string & message);
+	void Fatal(const Common::SDString & message);
 	bool IsFatalEnabled() const;
 
 	static Category * GetRoot();
 	static void SetRootPriority(Priority::Value priority);
 	static Priority::Value GetRootPriority();
-	static Category * GetCategory(const std::string & name);
-	static Category * GetExistingCategory(const std::string & name);
+	static Category * GetCategory(const Common::SDString & name);
+	static Category * GetExistingCategory(const Common::SDString & name);
 	static void Shutdown();
 	static void ShutdownForced();
 
 protected:
-	Category(const std::string & name, Category * parent, Priority::Value priority = Priority::kNotSet);
+	Category(const Common::SDString & name, Category * parent, Priority::Value priority = Priority::kNotSet);
 	virtual void _Log(Priority::Value priority, const i8 * format, va_list arguments);
-	virtual void _Log(Priority::Value priority, const std::string & message);
+	virtual void _Log(Priority::Value priority, const Common::SDString & message);
 
 private:
 	Category(Category &&) = delete;
@@ -96,11 +98,11 @@ private:
 	Category & operator=(const Category &) = delete;
 
 private:
-	const std::string name_;
+	const Common::SDString name_;
 	Category * parent_;
 	volatile Priority::Value priority_;
 	volatile bool is_additive_;
-	std::unordered_map<std::string, Appender *> * appender_map_;
+	std::unordered_map<Common::SDString, Appender *> * appender_map_;
 	mutable Mutex appenders_mutex_;
 };
 

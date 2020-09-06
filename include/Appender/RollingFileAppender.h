@@ -22,19 +22,31 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Layout_BasicLayout_INCLUDED
-#define Logger_Layout_BasicLayout_INCLUDED
+#ifndef Logger_Appender_RollingFileAppender_INCLUDED
+#define Logger_Appender_RollingFileAppender_INCLUDED
 
-#include "Layout/Layout.h"
+#include "Appender/FileAppender.h"
+#include "TimeStamp.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN BasicLayout : public Layout {
+class COMMON_EXTERN RollingFileAppender : public FileAppender {
 public:
-	BasicLayout();
-	virtual ~BasicLayout();
+	RollingFileAppender(const std::string & name, const std::string & file_name, bool async_log = false, size_t max_file_size = 10 * 1024 * 1024, i32 max_backup_index = 1, bool append = true, mode_t mode = 00644);
+	virtual ~RollingFileAppender();
 
-	virtual std::string Format(const Record & record) override;
+	virtual void SetMaxBackupIndex(i32 max_backup_index);
+	virtual i32 GetMaxBackupIndex() const;
+	virtual void SetMaximumFileSize(size_t max_file_size);
+	virtual size_t GetMaxFileSize() const;
+	virtual void RollOver();
+
+protected:
+	virtual void _Append(const Record & record) override;
+
+private:
+	size_t max_file_size_;
+	i32 max_backup_index_;
 };
 
 }

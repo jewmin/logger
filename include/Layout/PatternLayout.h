@@ -22,35 +22,48 @@
  * SOFTWARE.
  */
 
-#ifndef Logger_Appender_FileAppender_INCLUDED
-#define Logger_Appender_FileAppender_INCLUDED
+#ifndef Logger_Layout_PatternLayout_INCLUDED
+#define Logger_Layout_PatternLayout_INCLUDED
 
-#include "Appender/LayoutAppender.h"
+#include "Common.h"
+#include "Record.h"
+#include "SDString.h"
+#include "Layout/Layout.h"
 
 namespace Logger {
 
-class LOGGER_EXTERN FileAppender : public LayoutAppender {
+class COMMON_EXTERN PatternLayout : public Layout {
 public:
-	FileAppender(const std::string & name, const std::string & file_name, bool async_log = false, bool append = true, mode_t mode = 00644);
-	FileAppender(const std::string & name, i32 fd, bool async_log = false);
-	virtual ~FileAppender();
-	
-	virtual bool ReOpen() override;
-	virtual void Close() override;
+	PatternLayout();
+	virtual ~PatternLayout();
 
-	virtual void SetAppend(bool append);
-	virtual bool GetAppend() const;
-	virtual void SetMode(mode_t mode);
-	virtual mode_t GetMode() const;
+	/*
+	 * %%  百分号
+	 * %n 换行符
+	 * %c 日志类别
+	 * %m 日志消息
+	 * %p 日志级别(数字)
+	 * %P 日志级别(字符串)
+	 * %t 日志记录时间(时间戳)
+	 * %M 日志记录时间(时间戳毫秒部分)
+	 * %u 日志记录时间(从程序启动计算)
+	 * %d{%Y-%m-%d %H:%M:%S,%l} 格式化日志记录时间
+	 * %-10.20m 左对齐10~20字符 %20.50m 右对齐20~50字符
+	 */
+	virtual std::string Format(const Record & record) override;
+	virtual void SetConversionPattern(const std::string & conversion_pattern);
+	virtual std::string GetConversionPattern() const;
+	virtual void ClearConversionPattern();
 
-protected:
-	virtual void _Append(const Record & record) override;
+	class COMMON_EXTERN PatternComponent {
+	public:
+		virtual ~PatternComponent() {}
+		virtual void Append(std::ostringstream & out, const Record & record) = 0;
+	};
 
-protected:
-	const std::string file_name_;
-	i32 fd_;
-	i32 flags_;
-	mode_t mode_;
+private:
+	std::vector<PatternComponent *> * components_;
+	std::string conversion_pattern_;
 };
 
 }
