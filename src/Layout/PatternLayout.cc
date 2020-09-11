@@ -1,6 +1,5 @@
 #include "Layout/PatternLayout.h"
 #include "LocalTime.h"
-#include "StringUtil.h"
 #include "ConfigureFailure.h"
 
 namespace Logger {
@@ -15,7 +14,7 @@ public:
 	CategoryNameComponent() {}
 	virtual ~CategoryNameComponent() {}
 	virtual void Append(std::ostringstream & out, const Record & record) override {
-		out << record.category_;
+		out << *record.category_;
 	}
 };
 
@@ -25,7 +24,7 @@ public:
 	MessageComponent() {}
 	virtual ~MessageComponent() {}
 	virtual void Append(std::ostringstream & out, const Record & record) override {
-		out << record.message_;
+		out << *record.message_;
 	}
 };
 

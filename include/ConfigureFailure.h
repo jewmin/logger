@@ -32,8 +32,8 @@ namespace Logger {
 
 class COMMON_EXTERN ConfigureFailure : public Common::CExpection {
 public:
-	ConfigureFailure(const i8 * reason);
-	~ConfigureFailure();
+	explicit ConfigureFailure(const i8 * reason);
+	virtual ~ConfigureFailure();
 };
 
 }

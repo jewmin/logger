@@ -7,6 +7,7 @@ PROJECT(logger_test VERSION 1.0)
 # 添加源文件
 SET(srcs
 	${PROJECT_SOURCE_DIR}/Main.cc
+	${PROJECT_SOURCE_DIR}/ConfigureFailureTest.cc
 	${PROJECT_SOURCE_DIR}/PriorityTest.cc
 	${PROJECT_SOURCE_DIR}/RecordTest.cc
 )

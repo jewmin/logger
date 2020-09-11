@@ -79,6 +79,7 @@ MESSAGE(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
 # 	${PROJECT_SOURCE_DIR}/Category.cc
 # )
 SET(srcs
+	${PROJECT_SOURCE_DIR}/src/ConfigureFailure.cc
 	${PROJECT_SOURCE_DIR}/src/Priority.cc
 	${PROJECT_SOURCE_DIR}/src/Record.cc
 )

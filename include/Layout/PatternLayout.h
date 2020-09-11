@@ -50,9 +50,9 @@ public:
 	 * %d{%Y-%m-%d %H:%M:%S,%l} 格式化日志记录时间
 	 * %-10.20m 左对齐10~20字符 %20.50m 右对齐20~50字符
 	 */
-	virtual std::string Format(const Record & record) override;
-	virtual void SetConversionPattern(const std::string & conversion_pattern);
-	virtual std::string GetConversionPattern() const;
+	virtual Common::SDString Format(const Record & record) override;
+	virtual void SetConversionPattern(const i8 * conversion_pattern);
+	virtual const i8 * GetConversionPattern() const;
 	virtual void ClearConversionPattern();
 
 	class COMMON_EXTERN PatternComponent {
@@ -63,7 +63,7 @@ public:
 
 private:
 	std::vector<PatternComponent *> * components_;
-	std::string conversion_pattern_;
+	Common::SDString conversion_pattern_;
 };
 
 }
