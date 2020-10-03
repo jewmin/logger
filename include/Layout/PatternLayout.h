@@ -28,6 +28,7 @@
 #include "Common.h"
 #include "Record.h"
 #include "SDString.h"
+#include "CList.h"
 #include "Layout/Layout.h"
 
 namespace Logger {
@@ -62,7 +63,7 @@ public:
 	};
 
 private:
-	std::vector<PatternComponent *> * components_;
+	Common::TList<PatternComponent *> components_;
 	Common::SDString conversion_pattern_;
 };
 

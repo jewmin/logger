@@ -9,7 +9,7 @@ SimpleLayout::~SimpleLayout() {
 }
 
 Common::SDString SimpleLayout::Format(const Record & record) {
-	return Common::SDString::Format("%-8s: %s\n", *Priority::GetPriorityName(record.priority_), *record.message_);
+	return Common::SDString::Format("%-8s: %s\n", Priority::GetPriorityName(record.priority_), *record.message_);
 }
 
 }

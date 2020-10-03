@@ -1,5 +1,5 @@
 # cmake版本
-CMAKE_MINIMUM_REQUIRED(VERSION 3.7.2)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
 
 # 项目名
 PROJECT(liblogger VERSION 1.0)
@@ -79,10 +79,24 @@ MESSAGE(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
 # 	${PROJECT_SOURCE_DIR}/Category.cc
 # )
 SET(srcs
+	${PROJECT_SOURCE_DIR}/include/ConfigureFailure.h
+	${PROJECT_SOURCE_DIR}/include/Priority.h
+	${PROJECT_SOURCE_DIR}/include/Record.h
+	${PROJECT_SOURCE_DIR}/include/Layout/Layout.h
+	${PROJECT_SOURCE_DIR}/include/Layout/BasicLayout.h
+	${PROJECT_SOURCE_DIR}/include/Layout/SimpleLayout.h
+	${PROJECT_SOURCE_DIR}/include/Layout/PatternLayout.h
+
 	${PROJECT_SOURCE_DIR}/src/ConfigureFailure.cc
 	${PROJECT_SOURCE_DIR}/src/Priority.cc
 	${PROJECT_SOURCE_DIR}/src/Record.cc
+	${PROJECT_SOURCE_DIR}/src/Layout/BasicLayout.cc
+	${PROJECT_SOURCE_DIR}/src/Layout/SimpleLayout.cc
+	${PROJECT_SOURCE_DIR}/src/Layout/PatternLayout.cc
 )
+
+# 生成目录结构
+SOURCE_GROUP(TREE ${PROJECT_SOURCE_DIR} FILES ${srcs})
 
 # 生成目录结构
 # SOURCE_GROUP(Appender FILES ${Appender})

@@ -81,56 +81,56 @@ public:
 // %%d{%%Y-%%m-%%d %%H:%%M:%%S,%%l} 格式化日志记录时间
 class TimeStampComponent : public PatternLayout::PatternComponent {
 public:
-	TimeStampComponent(std::string time_format) {
+	TimeStampComponent(Common::SDString time_format) {
 		if (time_format == "") {
 			time_format = "%a %b %d %H:%M:%S %Y";
 		}
-		std::string::size_type pos = time_format.find("%l");
-		if (pos == std::string::npos) {
+		size_t pos = time_format.Find("%l");
+		if (pos == Common::SDString::npos) {
 			print_millis_ = false;
 			time_format1_ = time_format; 
 		} else {
 			print_millis_ = true;
-			time_format1_ = time_format.substr(0, pos);
-			time_format2_ = time_format.substr(pos + 2);
+			time_format1_ = time_format.SubStr(0, pos);
+			time_format2_ = time_format.SubStr(pos + 2);
 		}
 	}
 	virtual ~TimeStampComponent() {}
 	virtual void Append(std::ostringstream & out, const Record & record) override {
 		struct std::tm current_time;
 		std::time_t t = record.time_stamp_.GetSeconds();
-		LocalTime(&t, &current_time);
+		jc_localtime(&t, &current_time);
 
 		i8 formatted[100];
-		std::string time_format;
+		Common::SDString time_format;
 		if (print_millis_) {
 			std::ostringstream format_stream;
-			format_stream << time_format1_ << StringUtil::Format("%03d", record.time_stamp_.GetMilliSeconds()) << time_format2_;
-			time_format = format_stream.str();
+			format_stream << *time_format1_ << *Common::SDString::Format("%03d", record.time_stamp_.GetMilliSeconds()) << *time_format2_;
+			time_format = format_stream.str().c_str();
 		} else {
 			time_format = time_format1_;
 		}
-		std::strftime(formatted, sizeof(formatted), time_format.c_str(), &current_time);
+		std::strftime(formatted, sizeof(formatted), *time_format, &current_time);
 		out << formatted;
 	}
 
 private:
-	std::string time_format1_;
-	std::string time_format2_;
+	Common::SDString time_format1_;
+	Common::SDString time_format2_;
 	bool print_millis_;
 };
 
 // 普通字符
 class StringLiteralComponent : public PatternLayout::PatternComponent {
 public:
-	StringLiteralComponent(const std::string & literal) : literal_(literal) {}
+	StringLiteralComponent(const Common::SDString & literal) : literal_(literal) {}
 	virtual ~StringLiteralComponent() {}
 	virtual void Append(std::ostringstream & out, const Record & record) override {
-		out << literal_;
+		out << *literal_;
 	}
 
 private:
-	std::string literal_;
+	Common::SDString literal_;
 };
 
 // 对齐方式参考printf
@@ -171,25 +171,24 @@ private:
 //PatternLayout
 //*********************************************************************
 
-PatternLayout::PatternLayout() : components_(new std::vector<PatternLayout::PatternComponent *>()) {
+PatternLayout::PatternLayout() {
 }
 
 PatternLayout::~PatternLayout() {
 	ClearConversionPattern();
-	delete components_;
 }
 
-std::string PatternLayout::Format(const Record & record) {
+Common::SDString PatternLayout::Format(const Record & record) {
 	std::ostringstream message;
-	for (auto & it : *components_) {
-		it->Append(message, record);
+	for (Common::TList<PatternComponent *>::Iterator it = components_.Begin(); it != components_.End(); it++) {
+		(*it)->Append(message, record);
 	}
-	return message.str();
+	return Common::SDString(message.str().c_str());
 }
 
-void PatternLayout::SetConversionPattern(const std::string & conversion_pattern) {
+void PatternLayout::SetConversionPattern(const i8 * conversion_pattern) {
 	std::istringstream conversion_stream(conversion_pattern);
-	std::string literal;
+	Common::SDString literal;
 
 	i8 ch;
 	PatternLayout::PatternComponent * component = nullptr;
@@ -215,9 +214,9 @@ void PatternLayout::SetConversionPattern(const std::string & conversion_pattern)
 			if (!conversion_stream.get(ch)) {
 				std::ostringstream msg;
 				msg << "unterminated conversion specifier in '" << conversion_pattern << "' at index " << conversion_stream.tellg();
-				throw ConfigureFailure(msg.str());
+				throw ConfigureFailure(msg.str().c_str());
 			}
-			std::string spec_postfix = "";
+			Common::SDString spec_postfix;
 			{
 				i8 ch2;
 				if (conversion_stream.get(ch2)) {
@@ -239,7 +238,7 @@ void PatternLayout::SetConversionPattern(const std::string & conversion_pattern)
 				{
 					std::ostringstream endline;
 					endline << std::endl;
-					literal += endline.str();
+					literal += endline.str().c_str();
 				}
 				break;
 
@@ -278,11 +277,11 @@ void PatternLayout::SetConversionPattern(const std::string & conversion_pattern)
 			default:
 				std::ostringstream msg;
 				msg << "unknown conversion specifier '" << ch << "' in '" << conversion_pattern << "' at index " << conversion_stream.tellg();
-				throw ConfigureFailure(msg.str());
+				throw ConfigureFailure(msg.str().c_str());
 			}
 			if (component) {
-				if (!literal.empty()) {
-					components_->push_back(new StringLiteralComponent(literal));
+				if (!literal.Empty()) {
+					components_.PushBack(new StringLiteralComponent(literal));
 					literal = "";
 				}
 				if ((min_width != 0) || (max_width != 0)) {
@@ -290,29 +289,29 @@ void PatternLayout::SetConversionPattern(const std::string & conversion_pattern)
 					min_width = 0;
 					max_width = 0;
 				}
-				components_->push_back(component);
+				components_.PushBack(component);
 				component = nullptr;
 			}
 		} else {
 			literal += ch;
 		}
 	}
-	if (!literal.empty()) {
-		components_->push_back(new StringLiteralComponent(literal));
+	if (!literal.Empty()) {
+		components_.PushBack(new StringLiteralComponent(literal));
 	}
 
 	conversion_pattern_ = conversion_pattern;
 }
 
-std::string PatternLayout::GetConversionPattern() const {
-	return conversion_pattern_;
+const i8 * PatternLayout::GetConversionPattern() const {
+	return *conversion_pattern_;
 }
 
 void PatternLayout::ClearConversionPattern() {
-	for (auto & it : *components_) {
-		delete it;
+	for (Common::TList<PatternComponent *>::Iterator it = components_.Begin(); it != components_.End(); it++) {
+		delete *it;
 	}
-	components_->clear();
+	components_.Clear();
 	conversion_pattern_ = "";
 }
 

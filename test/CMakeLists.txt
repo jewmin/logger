@@ -1,5 +1,5 @@
 # cmake版本
-CMAKE_MINIMUM_REQUIRED(VERSION 3.7.2)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
 
 # 项目名
 PROJECT(logger_test VERSION 1.0)
@@ -10,6 +10,7 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/ConfigureFailureTest.cc
 	${PROJECT_SOURCE_DIR}/PriorityTest.cc
 	${PROJECT_SOURCE_DIR}/RecordTest.cc
+	${PROJECT_SOURCE_DIR}/LayoutTest.cc
 )
 
 # 单元测试
