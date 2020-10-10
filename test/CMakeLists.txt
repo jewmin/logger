@@ -11,6 +11,7 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/PriorityTest.cc
 	${PROJECT_SOURCE_DIR}/RecordTest.cc
 	${PROJECT_SOURCE_DIR}/LayoutTest.cc
+	${PROJECT_SOURCE_DIR}/AppenderTest.cc
 )
 
 # 单元测试

@@ -56,7 +56,7 @@ public:
 	virtual const i8 * GetConversionPattern() const;
 	virtual void ClearConversionPattern();
 
-	class COMMON_EXTERN PatternComponent {
+	class COMMON_EXTERN PatternComponent : public Common::CObject {
 	public:
 		virtual ~PatternComponent() {}
 		virtual void Append(std::ostringstream & out, const Record & record) = 0;

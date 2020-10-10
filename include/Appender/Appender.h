@@ -28,10 +28,12 @@
 #include "Mutex.h"
 #include "Record.h"
 #include "Layout/Layout.h"
+#include "SDString.h"
+#include "CObject.h"
 
 namespace Logger {
 
-class COMMON_EXTERN Appender {
+class COMMON_EXTERN Appender : public Common::CObject {
 	friend class Category;
 
 public:
@@ -43,15 +45,15 @@ public:
 	virtual bool RequiresLayout() const = 0;
 	virtual void SetLayout(Layout * layout) = 0;
 
-	const std::string & GetName() const;
+	const Common::SDString & GetName() const;
 
-	static Appender * GetAppender(const std::string & name);
+	static Appender * GetAppender(const Common::SDString & name);
 	static void DeleteAllAppenders();
 	static bool ReOpenAll();
 	static void CloseAll();
 
 protected:
-	Appender(const std::string & name);
+	Appender(const i8 * name);
 
 private:
 	Appender(Appender &&) = delete;
@@ -60,42 +62,14 @@ private:
 	Appender & operator=(const Appender &) = delete;
 
 private:
-	const std::string name_;
-};
-
-class AppenderMapStorage {
-	friend class Appender;
-
-public:
-	~AppenderMapStorage();
-
-protected:
-	AppenderMapStorage();
-
-	std::unordered_map<std::string, Appender *> * GetAllAppenders();
-	void DeleteAllAppenders();
-	void _DeleteAllAppenders(std::vector<Appender *> & appenders);
-	void AddAppender(Appender * appender);
-	void RemoveAppender(Appender * appender);
-
-	static AppenderMapStorage * Get();
-
-private:
-	AppenderMapStorage(AppenderMapStorage &&) = delete;
-	AppenderMapStorage(const AppenderMapStorage &) = delete;
-	AppenderMapStorage & operator=(AppenderMapStorage &&) = delete;
-	AppenderMapStorage & operator=(const AppenderMapStorage &) = delete;
-
-private:
-	std::unordered_map<std::string, Appender *> * appender_map_;
-	mutable Mutex appender_mutex_;
+	const Common::SDString name_;
 };
 
 //*********************************************************************
 //Appender
 //*********************************************************************
 
-inline const std::string & Appender::GetName() const {
+inline const Common::SDString & Appender::GetName() const {
 	return name_;
 }
 

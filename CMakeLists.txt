@@ -30,8 +30,6 @@ MESSAGE(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
 
 # 添加源文件
 # SET(Appender
-# 	${PROJECT_SOURCE_DIR}/Appender/Appender.h
-# 	${PROJECT_SOURCE_DIR}/Appender/Appender.cc
 # 	${PROJECT_SOURCE_DIR}/Appender/AppenderSkeleton.cc
 # 	${PROJECT_SOURCE_DIR}/Appender/AppenderSkeleton.h
 # 	${PROJECT_SOURCE_DIR}/Appender/LayoutAppender.cc
@@ -44,35 +42,10 @@ MESSAGE(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
 # 	${PROJECT_SOURCE_DIR}/Appender/DailyRollingFileAppender.cc
 # )
 
-# SET(Layout
-# 	${PROJECT_SOURCE_DIR}/Layout/Layout.h
-# 	${PROJECT_SOURCE_DIR}/Layout/BasicLayout.h
-# 	${PROJECT_SOURCE_DIR}/Layout/BasicLayout.cc
-# 	${PROJECT_SOURCE_DIR}/Layout/SimpleLayout.h
-# 	${PROJECT_SOURCE_DIR}/Layout/SimpleLayout.cc
-# 	${PROJECT_SOURCE_DIR}/Layout/PatternLayout.h
-# 	${PROJECT_SOURCE_DIR}/Layout/PatternLayout.cc
-# )
 
 # SET(all_srcs
 # 	${Appender}
 # 	${Layout}
-# 	${PROJECT_SOURCE_DIR}/Logger.h
-# 	${PROJECT_SOURCE_DIR}/Mutex.h
-# 	${PROJECT_SOURCE_DIR}/ConfigureFailure.h
-# 	${PROJECT_SOURCE_DIR}/ConfigureFailure.cc
-# 	${PROJECT_SOURCE_DIR}/StringUtil.h
-# 	${PROJECT_SOURCE_DIR}/StringUtil.cc
-# 	${PROJECT_SOURCE_DIR}/TimeStamp.h
-# 	${PROJECT_SOURCE_DIR}/TimeStamp.cc
-# 	${PROJECT_SOURCE_DIR}/LocalTime.h
-# 	${PROJECT_SOURCE_DIR}/LocalTime.cc
-# 	${PROJECT_SOURCE_DIR}/Thread.h
-# 	${PROJECT_SOURCE_DIR}/Thread.cc
-# 	${PROJECT_SOURCE_DIR}/Priority.h
-# 	${PROJECT_SOURCE_DIR}/Priority.cc
-# 	${PROJECT_SOURCE_DIR}/Record.h
-# 	${PROJECT_SOURCE_DIR}/Record.cc
 # 	${PROJECT_SOURCE_DIR}/Hierarchy.h
 # 	${PROJECT_SOURCE_DIR}/Hierarchy.cc
 # 	${PROJECT_SOURCE_DIR}/Category.h
@@ -86,6 +59,7 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/include/Layout/BasicLayout.h
 	${PROJECT_SOURCE_DIR}/include/Layout/SimpleLayout.h
 	${PROJECT_SOURCE_DIR}/include/Layout/PatternLayout.h
+	${PROJECT_SOURCE_DIR}/include/Appender/Appender.h
 
 	${PROJECT_SOURCE_DIR}/src/ConfigureFailure.cc
 	${PROJECT_SOURCE_DIR}/src/Priority.cc
@@ -93,14 +67,11 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/src/Layout/BasicLayout.cc
 	${PROJECT_SOURCE_DIR}/src/Layout/SimpleLayout.cc
 	${PROJECT_SOURCE_DIR}/src/Layout/PatternLayout.cc
+	${PROJECT_SOURCE_DIR}/src/Appender/Appender.cc
 )
 
 # 生成目录结构
 SOURCE_GROUP(TREE ${PROJECT_SOURCE_DIR} FILES ${srcs})
-
-# 生成目录结构
-# SOURCE_GROUP(Appender FILES ${Appender})
-# SOURCE_GROUP(Layout FILES ${Layout})
 
 # 设置输出目录
 SET(CMAKE_DEBUG_POSTFIX "d")
