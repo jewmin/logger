@@ -2,7 +2,7 @@
 
 namespace Logger {
 
-AppenderSkeleton::AppenderSkeleton(const std::string & name, bool async_log) : Appender(name), async_log_(async_log) {
+AppenderSkeleton::AppenderSkeleton(const i8 * name, bool async_log) : Appender(name), async_log_(async_log) {
 	if (async_log_) {
 		Start();
 	}
@@ -13,7 +13,7 @@ AppenderSkeleton::~AppenderSkeleton() {
 
 void AppenderSkeleton::DoAppend(const Record & record) {
 	if (async_log_) {
-		Mutex::ScopedLock lock(record_mutex_);
+		Common::CMutex::ScopedLock lock(record_mutex_);
 		record_vec_.push_back(new Record(record));
 	} else {
 		_Append(record);
@@ -24,17 +24,20 @@ bool AppenderSkeleton::ReOpen() {
 	return true;
 }
 
+void AppenderSkeleton::Close() {
+}
+
 void AppenderSkeleton::OnRountine() {
 	while (!Terminated()) {
 		_DoAppend();
-		Thread::Sleep(10);
+		Common::CThread::Sleep(10);
 	}
 }
 
 void AppenderSkeleton::_DoAppend() {
 	std::vector<Record *> vec;
 	{
-		Mutex::ScopedLock lock(record_mutex_);
+		Common::CMutex::ScopedLock lock(record_mutex_);
 		vec.swap(record_vec_);
 	}
 	for (auto & it : vec) {

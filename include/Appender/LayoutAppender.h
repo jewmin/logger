@@ -25,6 +25,7 @@
 #ifndef Logger_Appender_LayoutAppender_INCLUDED
 #define Logger_Appender_LayoutAppender_INCLUDED
 
+#include "Common.h"
 #include "Appender/AppenderSkeleton.h"
 #include "Layout/Layout.h"
 
@@ -32,7 +33,7 @@ namespace Logger {
 
 class COMMON_EXTERN LayoutAppender : public AppenderSkeleton {
 public:
-	LayoutAppender(const std::string & name, bool async_log = false);
+	LayoutAppender(const i8 * name, bool async_log = false);
 	virtual ~LayoutAppender();
 
 	virtual bool RequiresLayout() const override;

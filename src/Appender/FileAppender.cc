@@ -2,15 +2,15 @@
 
 namespace Logger {
 
-FileAppender::FileAppender(const std::string & name, const std::string & file_name, bool async_log, bool append, mode_t mode)
+FileAppender::FileAppender(const i8 * name, const i8 * file_name, bool async_log, bool append, mode_t mode)
 	: LayoutAppender(name, async_log), file_name_(file_name), flags_(O_CREAT | O_APPEND | O_WRONLY), mode_(mode) {
 	if (!append) {
 		flags_ |= O_TRUNC;
 	}
-	fd_ = ::open(file_name_.c_str(), flags_, mode_);
+	fd_ = ::open(*file_name_, flags_, mode_);
 }
 
-FileAppender::FileAppender(const std::string & name, i32 fd, bool async_log)
+FileAppender::FileAppender(const i8 * name, i32 fd, bool async_log)
 	: LayoutAppender(name, async_log), file_name_(""), fd_(fd), flags_(O_CREAT | O_APPEND | O_WRONLY), mode_(00644) {
 }
 
@@ -22,7 +22,7 @@ FileAppender::~FileAppender() {
 
 bool FileAppender::ReOpen() {
 	if (file_name_ != "") {
-		i32 fd = ::open(file_name_.c_str(), flags_, mode_);
+		i32 fd = ::open(*file_name_, flags_, mode_);
 		if (fd == -1) {
 			return false;
 		}
@@ -62,9 +62,9 @@ mode_t FileAppender::GetMode() const {
 }
 
 void FileAppender::_Append(const Record & record) {
-	std::string message(GetLayout()->Format(record));
+	Common::SDString message(GetLayout()->Format(record));
 	if (fd_ != -1) {
-		::write(fd_, message.data(), static_cast<u32>(message.length()));
+		::write(fd_, *message, static_cast<u32>(message.Size()));
 	}
 }
 

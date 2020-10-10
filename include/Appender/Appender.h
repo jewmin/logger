@@ -25,11 +25,11 @@
 #ifndef Logger_Appender_Appender_INCLUDED
 #define Logger_Appender_Appender_INCLUDED
 
-#include "Mutex.h"
-#include "Record.h"
-#include "Layout/Layout.h"
-#include "SDString.h"
+#include "Common.h"
 #include "CObject.h"
+#include "Record.h"
+#include "SDString.h"
+#include "Layout/Layout.h"
 
 namespace Logger {
 

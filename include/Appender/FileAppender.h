@@ -25,14 +25,17 @@
 #ifndef Logger_Appender_FileAppender_INCLUDED
 #define Logger_Appender_FileAppender_INCLUDED
 
+#include "Common.h"
+#include "SDString.h"
+#include "Record.h"
 #include "Appender/LayoutAppender.h"
 
 namespace Logger {
 
 class COMMON_EXTERN FileAppender : public LayoutAppender {
 public:
-	FileAppender(const std::string & name, const std::string & file_name, bool async_log = false, bool append = true, mode_t mode = 00644);
-	FileAppender(const std::string & name, i32 fd, bool async_log = false);
+	FileAppender(const i8 * name, const i8 * file_name, bool async_log = false, bool append = true, mode_t mode = 00644);
+	FileAppender(const i8 * name, i32 fd, bool async_log = false);
 	virtual ~FileAppender();
 	
 	virtual bool ReOpen() override;
@@ -47,7 +50,7 @@ protected:
 	virtual void _Append(const Record & record) override;
 
 protected:
-	const std::string file_name_;
+	const Common::SDString file_name_;
 	i32 fd_;
 	i32 flags_;
 	mode_t mode_;

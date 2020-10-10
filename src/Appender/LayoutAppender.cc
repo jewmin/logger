@@ -3,7 +3,7 @@
 
 namespace Logger {
 
-LayoutAppender::LayoutAppender(const std::string & name, bool async_log) : AppenderSkeleton(name, async_log), layout_(new BasicLayout()) {
+LayoutAppender::LayoutAppender(const i8 * name, bool async_log) : AppenderSkeleton(name, async_log), layout_(new BasicLayout()) {
 }
 
 LayoutAppender::~LayoutAppender() {

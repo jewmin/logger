@@ -1,4 +1,6 @@
 #include "Appender/Appender.h"
+#include "Mutex.h"
+#include "CObject.h"
 
 namespace Logger {
 

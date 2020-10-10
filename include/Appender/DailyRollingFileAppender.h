@@ -25,14 +25,15 @@
 #ifndef Logger_Appender_DailyRollingFileAppender_INCLUDED
 #define Logger_Appender_DailyRollingFileAppender_INCLUDED
 
+#include "Common.h"
+#include "Record.h"
 #include "Appender/FileAppender.h"
-#include "TimeStamp.h"
 
 namespace Logger {
 
 class COMMON_EXTERN DailyRollingFileAppender : public FileAppender {
 public:
-	DailyRollingFileAppender(const std::string & name, const std::string & file_name, bool async_log = false, bool append = true, mode_t mode = 00644);
+	DailyRollingFileAppender(const i8 * name, const i8 * file_name, bool async_log = false, bool append = true, mode_t mode = 00644);
 	virtual ~DailyRollingFileAppender();
 
 	virtual void RollOver();

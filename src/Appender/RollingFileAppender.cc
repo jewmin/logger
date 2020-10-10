@@ -1,10 +1,9 @@
 #include "Appender/RollingFileAppender.h"
-#include "LocalTime.h"
-#include "StringUtil.h"
+#include "SDString.h"
 
 namespace Logger {
 
-RollingFileAppender::RollingFileAppender(const std::string & name, const std::string & file_name, bool async_log, size_t max_file_size, i32 max_backup_index, bool append, mode_t mode)
+RollingFileAppender::RollingFileAppender(const i8 * name, const i8 * file_name, bool async_log, size_t max_file_size, i32 max_backup_index, bool append, mode_t mode)
 	: FileAppender(name, file_name, async_log, append, mode), max_file_size_(max_file_size), max_backup_index_(max_backup_index > 0 ? max_backup_index : 1) {
 }
 
@@ -32,17 +31,17 @@ size_t RollingFileAppender::GetMaxFileSize() const {
 void RollingFileAppender::RollOver() {
 	Close();
 	if (max_backup_index_ > 0) {
-		std::string last_file_name = StringUtil::Format("%s.%d", file_name_.c_str(), max_backup_index_);
-		::remove(last_file_name.c_str());
+		Common::SDString last_file_name = Common::SDString::Format("%s.%d", *file_name_, max_backup_index_);
+		::remove(*last_file_name);
 		for (i32 i = max_backup_index_; i > 1; --i) {
-			std::string log_file_name = StringUtil::Format("%s.%d", file_name_.c_str(), i);
-			::rename(log_file_name.c_str(), last_file_name.c_str());
+			Common::SDString log_file_name = Common::SDString::Format("%s.%d", *file_name_, i);
+			::rename(*log_file_name, *last_file_name);
 			last_file_name = log_file_name;
 		}
-		::rename(file_name_.c_str(), last_file_name.c_str());
+		::rename(*file_name_, *last_file_name);
 	}
 	if (!ReOpen()) {
-		std::cout << "Error opening file " << file_name_ << std::endl;
+		std::printf("Error opening file %s\n", *file_name_);
 	}
 }
 

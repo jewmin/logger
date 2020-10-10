@@ -29,19 +29,6 @@ MESSAGE(STATUS "LINUX:" ${LINUX})
 MESSAGE(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
 
 # 添加源文件
-# SET(Appender
-# 	${PROJECT_SOURCE_DIR}/Appender/AppenderSkeleton.cc
-# 	${PROJECT_SOURCE_DIR}/Appender/AppenderSkeleton.h
-# 	${PROJECT_SOURCE_DIR}/Appender/LayoutAppender.cc
-# 	${PROJECT_SOURCE_DIR}/Appender/LayoutAppender.h
-# 	${PROJECT_SOURCE_DIR}/Appender/FileAppender.h
-# 	${PROJECT_SOURCE_DIR}/Appender/FileAppender.cc
-# 	${PROJECT_SOURCE_DIR}/Appender/RollingFileAppender.h
-# 	${PROJECT_SOURCE_DIR}/Appender/RollingFileAppender.cc
-# 	${PROJECT_SOURCE_DIR}/Appender/DailyRollingFileAppender.h
-# 	${PROJECT_SOURCE_DIR}/Appender/DailyRollingFileAppender.cc
-# )
-
 
 # SET(all_srcs
 # 	${Appender}
@@ -60,6 +47,11 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/include/Layout/SimpleLayout.h
 	${PROJECT_SOURCE_DIR}/include/Layout/PatternLayout.h
 	${PROJECT_SOURCE_DIR}/include/Appender/Appender.h
+	${PROJECT_SOURCE_DIR}/include/Appender/AppenderSkeleton.h
+	${PROJECT_SOURCE_DIR}/include/Appender/LayoutAppender.h
+	${PROJECT_SOURCE_DIR}/include/Appender/FileAppender.h
+	${PROJECT_SOURCE_DIR}/include/Appender/RollingFileAppender.h
+	${PROJECT_SOURCE_DIR}/include/Appender/DailyRollingFileAppender.h
 
 	${PROJECT_SOURCE_DIR}/src/ConfigureFailure.cc
 	${PROJECT_SOURCE_DIR}/src/Priority.cc
@@ -68,6 +60,11 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/src/Layout/SimpleLayout.cc
 	${PROJECT_SOURCE_DIR}/src/Layout/PatternLayout.cc
 	${PROJECT_SOURCE_DIR}/src/Appender/Appender.cc
+	${PROJECT_SOURCE_DIR}/src/Appender/AppenderSkeleton.cc
+	${PROJECT_SOURCE_DIR}/src/Appender/LayoutAppender.cc
+	${PROJECT_SOURCE_DIR}/src/Appender/FileAppender.cc
+	${PROJECT_SOURCE_DIR}/src/Appender/RollingFileAppender.cc
+	${PROJECT_SOURCE_DIR}/src/Appender/DailyRollingFileAppender.cc
 )
 
 # 生成目录结构
