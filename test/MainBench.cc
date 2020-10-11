@@ -1,7 +1,7 @@
 #ifdef USE_VLD
 #include "vld.h"
 #endif
-#include "Logger.h"
+#include "Common.h"
 #include "Category.h"
 #include "Appender/DailyRollingFileAppender.h"
 #include "Appender/RollingFileAppender.h"
