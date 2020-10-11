@@ -13,6 +13,7 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/LayoutTest.cc
 	${PROJECT_SOURCE_DIR}/AppenderTest.cc
 	${PROJECT_SOURCE_DIR}/FileAppenderTest.cc
+	${PROJECT_SOURCE_DIR}/CategoryTest.cc
 )
 
 # 单元测试

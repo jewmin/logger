@@ -3,23 +3,23 @@
 
 class MockCategoryAppender : public Logger::Appender {
 public:
-	MockCategoryAppender(const std::string & name) : Logger::Appender(name) {
+	MockCategoryAppender(const i8 * name) : Logger::Appender(name) {
 	}
 
 	virtual ~MockCategoryAppender() {
 	}
 
 	virtual void DoAppend(const Logger::Record & record) override {
-		std::printf("%lld,%lld [%s][%s] %s\n", record.time_stamp_.GetSeconds(), record.time_stamp_.GetMilliSeconds(), record.category_.c_str(), GetName().c_str(), record.message_.c_str());
+		std::printf("%lld,%lld [%s][%s] %s\n", record.time_stamp_.GetSeconds(), record.time_stamp_.GetMilliSeconds(), *record.category_, *GetName(), *record.message_);
 	}
 
 	virtual bool ReOpen() override {
-		std::printf("%s reopen\n", GetName().c_str());
+		std::printf("%s reopen\n", *GetName());
 		return true;
 	}
 
 	virtual void Close() override {
-		std::printf("%s close\n", GetName().c_str());
+		std::printf("%s close\n", *GetName());
 	}
 
 	virtual bool RequiresLayout() const override {
@@ -47,7 +47,7 @@ public:
 TEST_F(CategoryTest, root) {
 	Logger::Category * root = Logger::Category::GetRoot();
 	EXPECT_TRUE(root != nullptr);
-	EXPECT_STREQ(root->GetName().c_str(), "");
+	EXPECT_STREQ(*root->GetName(), "");
 }
 
 TEST_F(CategoryTest, root_priority) {
@@ -65,7 +65,7 @@ TEST_F(CategoryTest, get) {
 	// EXPECT_TRUE(c1 == nullptr);
 	Logger::Category * c2 = Logger::Category::GetCategory("test");
 	EXPECT_TRUE(c2 != nullptr);
-	EXPECT_STREQ(c2->GetName().c_str(), "test");
+	EXPECT_STREQ(*c2->GetName(), "test");
 	c1 = Logger::Category::GetExistingCategory("test");
 	EXPECT_TRUE(c1 == c2);
 }
@@ -132,11 +132,11 @@ TEST_F(CategoryTest, log_debug) {
 TEST_F(CategoryTest, log_debug_string) {
 	Logger::Category::SetRootPriority(Logger::Priority::kDebug);
 	Logger::Category * c = Logger::Category::GetCategory("root.first.second");
-	c->Debug(std::string("this is debug message, enable"));
-	c->Info(std::string("this is info message, enable"));
-	c->Warn(std::string("this is warn message, enable"));
-	c->Error(std::string("this is error message, enable"));
-	c->Fatal(std::string("this is fatal message, enable"));
+	c->Debug(Common::SDString("this is debug message, enable"));
+	c->Info(Common::SDString("this is info message, enable"));
+	c->Warn(Common::SDString("this is warn message, enable"));
+	c->Error(Common::SDString("this is error message, enable"));
+	c->Fatal(Common::SDString("this is fatal message, enable"));
 }
 
 TEST_F(CategoryTest, appender) {
@@ -178,11 +178,11 @@ public:
 TEST_F(CategoryAppenderTest, get_appender) {
 	EXPECT_TRUE(Logger::Category::GetCategory("root")->GetAppender() == nullptr);
 	EXPECT_TRUE(Logger::Category::GetCategory("root.first")->GetAppender() != nullptr);
-	EXPECT_STREQ(Logger::Category::GetCategory("root.first.second")->GetAppender()->GetName().c_str(), "root.first.second");
+	EXPECT_STREQ(*Logger::Category::GetCategory("root.first.second")->GetAppender()->GetName(), "root.first.second");
 
 	EXPECT_TRUE(Logger::Category::GetCategory("root")->GetAppender("root.first") == nullptr);
-	EXPECT_STREQ(Logger::Category::GetCategory("root.first")->GetAppender("root.second")->GetName().c_str(), "root.second");
-	EXPECT_STREQ(Logger::Category::GetCategory("root.first.second")->GetAppender("root.first.second")->GetName().c_str(), "root.first.second");
+	EXPECT_STREQ(*Logger::Category::GetCategory("root.first")->GetAppender("root.second")->GetName(), "root.second");
+	EXPECT_STREQ(*Logger::Category::GetCategory("root.first.second")->GetAppender("root.first.second")->GetName(), "root.first.second");
 }
 
 TEST_F(CategoryAppenderTest, remove_appender) {
@@ -195,29 +195,29 @@ TEST_F(CategoryAppenderTest, remove_appender) {
 TEST_F(CategoryAppenderTest, log_debug) {
 	Logger::Category::SetRootPriority(Logger::Priority::kDebug);
 	Logger::Category * c = Logger::Category::GetCategory("root.first.second");
-	c->Debug("this is %s message, enable", Logger::Priority::GetPriorityName(c->GetPriority()).c_str());
-	c->Info("this is %s message, enable", Logger::Priority::GetPriorityName(c->GetPriority()).c_str());
-	c->Warn("this is %s message, enable", Logger::Priority::GetPriorityName(c->GetPriority()).c_str());
-	c->Error("this is %s message, enable", Logger::Priority::GetPriorityName(c->GetPriority()).c_str());
-	c->Fatal("this is %s message, enable", Logger::Priority::GetPriorityName(c->GetPriority()).c_str());
+	c->Debug("this is %s message, enable", Logger::Priority::GetPriorityName(c->GetPriority()));
+	c->Info("this is %s message, enable", Logger::Priority::GetPriorityName(c->GetPriority()));
+	c->Warn("this is %s message, enable", Logger::Priority::GetPriorityName(c->GetPriority()));
+	c->Error("this is %s message, enable", Logger::Priority::GetPriorityName(c->GetPriority()));
+	c->Fatal("this is %s message, enable", Logger::Priority::GetPriorityName(c->GetPriority()));
 }
 
 TEST_F(CategoryAppenderTest, log_debug_string) {
 	Logger::Category::SetRootPriority(Logger::Priority::kDebug);
 	Logger::Category * c = Logger::Category::GetCategory("root.first.second");
 	c->SetAdditivity(false);
-	c->Debug(std::string("this is debug message, enable"));
-	c->Info(std::string("this is info message, enable"));
-	c->Warn(std::string("this is warn message, enable"));
-	c->Error(std::string("this is error message, enable"));
-	c->Fatal(std::string("this is fatal message, enable"));
+	c->Debug(Common::SDString("this is debug message, enable"));
+	c->Info(Common::SDString("this is info message, enable"));
+	c->Warn(Common::SDString("this is warn message, enable"));
+	c->Error(Common::SDString("this is error message, enable"));
+	c->Fatal(Common::SDString("this is fatal message, enable"));
 }
 
 TEST_F(CategoryAppenderTest, log) {
 	Logger::Category * c = Logger::Category::GetCategory("root.first.second");
 	for (i32 i = 0; i < 6; i++) {
-		c->Log(i, "test log %d %s", i, Logger::Priority::GetPriorityName(i).c_str());
-		c->Log(i, std::string("string message"));
+		c->Log(i, "test log %d %s", i, Logger::Priority::GetPriorityName(i));
+		c->Log(i, Common::SDString("string message"));
 	}
 	Format("[%s]: %d", "abcdefg", 1234567890);
 }

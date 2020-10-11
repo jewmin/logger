@@ -43,9 +43,9 @@ Appender::~Appender() {
 	AppenderContainer::Get()->RemoveAppender(this);
 }
 
-Appender * Appender::GetAppender(const Common::SDString & name) {
+Appender * Appender::GetAppender(const i8 * name) {
 	Common::CMutex::ScopedLock lock(AppenderContainer::Get()->appender_mutex_);
-	auto got = AppenderContainer::Get()->appender_map_.find(name);
+	auto got = AppenderContainer::Get()->appender_map_.find(Common::SDString(name));
 	if (got == AppenderContainer::Get()->appender_map_.end()) {
 		return nullptr;
 	} else {

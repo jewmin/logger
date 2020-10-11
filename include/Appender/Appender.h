@@ -47,7 +47,7 @@ public:
 
 	const Common::SDString & GetName() const;
 
-	static Appender * GetAppender(const Common::SDString & name);
+	static Appender * GetAppender(const i8 * name);
 	static void DeleteAllAppenders();
 	static bool ReOpenAll();
 	static void CloseAll();

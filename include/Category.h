@@ -26,19 +26,22 @@
 #define Logger_Category_INCLUDED
 
 #include "Common.h"
+#include "CObject.h"
+#include "Mutex.h"
 #include "Priority.h"
 #include "SDString.h"
+#include "Record.h"
 #include "Appender/Appender.h"
 
 namespace Logger {
 
-class COMMON_EXTERN Category {
+class COMMON_EXTERN Category : public Common::CObject {
 	friend class Hierarchy;
 
 public:
 	virtual ~Category();
 
-	virtual const Common::SDString GetName() const;
+	virtual const Common::SDString & GetName() const;
 	virtual void SetPriority(Priority::Value priority);
 	virtual Priority::Value GetPriority() const;
 	virtual Priority::Value GetChainedPriority() const;
@@ -46,7 +49,7 @@ public:
 
 	virtual void AddAppender(Appender * appender);
 	virtual Appender * GetAppender() const;
-	virtual Appender * GetAppender(const Common::SDString & name) const;
+	virtual Appender * GetAppender(const i8 * name) const;
 	virtual void RemoveAllAppenders();
 	virtual void RemoveAppender(Appender * appender);
 	virtual void CallAppenders(const Record & record);
@@ -81,13 +84,13 @@ public:
 	static Category * GetRoot();
 	static void SetRootPriority(Priority::Value priority);
 	static Priority::Value GetRootPriority();
-	static Category * GetCategory(const Common::SDString & name);
-	static Category * GetExistingCategory(const Common::SDString & name);
+	static Category * GetCategory(const i8 * name);
+	static Category * GetExistingCategory(const i8 * name);
 	static void Shutdown();
 	static void ShutdownForced();
 
 protected:
-	Category(const Common::SDString & name, Category * parent, Priority::Value priority = Priority::kNotSet);
+	Category(const i8 * name, Category * parent, Priority::Value priority = Priority::kNotSet);
 	virtual void _Log(Priority::Value priority, const i8 * format, va_list arguments);
 	virtual void _Log(Priority::Value priority, const Common::SDString & message);
 
@@ -102,8 +105,8 @@ private:
 	Category * parent_;
 	volatile Priority::Value priority_;
 	volatile bool is_additive_;
-	std::unordered_map<Common::SDString, Appender *> * appender_map_;
-	mutable Mutex appenders_mutex_;
+	std::map<const Common::SDString, Appender *> appender_map_;
+	mutable Common::CMutex appenders_mutex_;
 };
 
 inline bool Category::IsDebugEnabled() const {

@@ -29,15 +29,6 @@ MESSAGE(STATUS "LINUX:" ${LINUX})
 MESSAGE(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
 
 # 添加源文件
-
-# SET(all_srcs
-# 	${Appender}
-# 	${Layout}
-# 	${PROJECT_SOURCE_DIR}/Hierarchy.h
-# 	${PROJECT_SOURCE_DIR}/Hierarchy.cc
-# 	${PROJECT_SOURCE_DIR}/Category.h
-# 	${PROJECT_SOURCE_DIR}/Category.cc
-# )
 SET(srcs
 	${PROJECT_SOURCE_DIR}/include/ConfigureFailure.h
 	${PROJECT_SOURCE_DIR}/include/Priority.h
@@ -52,6 +43,8 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/include/Appender/FileAppender.h
 	${PROJECT_SOURCE_DIR}/include/Appender/RollingFileAppender.h
 	${PROJECT_SOURCE_DIR}/include/Appender/DailyRollingFileAppender.h
+	${PROJECT_SOURCE_DIR}/include/Hierarchy.h
+	${PROJECT_SOURCE_DIR}/include/Category.h
 
 	${PROJECT_SOURCE_DIR}/src/ConfigureFailure.cc
 	${PROJECT_SOURCE_DIR}/src/Priority.cc
@@ -65,6 +58,8 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/src/Appender/FileAppender.cc
 	${PROJECT_SOURCE_DIR}/src/Appender/RollingFileAppender.cc
 	${PROJECT_SOURCE_DIR}/src/Appender/DailyRollingFileAppender.cc
+	${PROJECT_SOURCE_DIR}/src/Hierarchy.cc
+	${PROJECT_SOURCE_DIR}/src/Category.cc
 )
 
 # 生成目录结构

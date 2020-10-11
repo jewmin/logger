@@ -4,7 +4,7 @@
 namespace Logger {
 
 Category * Category::GetRoot() {
-	return GetCategory(Common::SDString(""));
+	return GetCategory("");
 }
 
 void Category::SetRootPriority(Priority::Value priority) {
@@ -15,12 +15,12 @@ Priority::Value Category::GetRootPriority() {
 	return GetRoot()->GetPriority();
 }
 
-Category * Category::GetCategory(const Common::SDString & name) {
-	return Hierarchy::Get()->GetCategory(name);
+Category * Category::GetCategory(const i8 * name) {
+	return Hierarchy::Get()->GetCategory(Common::SDString(name));
 }
 
-Category * Category::GetExistingCategory(const Common::SDString & name) {
-	return Hierarchy::Get()->GetExistingCategory(name);
+Category * Category::GetExistingCategory(const i8 * name) {
+	return Hierarchy::Get()->GetExistingCategory(Common::SDString(name));
 }
 
 void Category::Shutdown() {
@@ -36,16 +36,15 @@ void Category::ShutdownForced() {
 //Category
 //*********************************************************************
 
-Category::Category(const Common::SDString & name, Category * parent, Priority::Value priority)
-	: name_(name), parent_(parent), priority_(priority), is_additive_(true), appender_map_(new std::unordered_map<Common::SDString, Appender *>()) {
+Category::Category(const i8 * name, Category * parent, Priority::Value priority)
+	: name_(name), parent_(parent), priority_(priority), is_additive_(true) {
 }
 
 Category::~Category() {
 	RemoveAllAppenders();
-	delete appender_map_;
 }
 
-const Common::SDString Category::GetName() const {
+const Common::SDString & Category::GetName() const {
 	return name_;
 }
 
@@ -75,42 +74,42 @@ bool Category::IsPriorityEnabled(Priority::Value priority) const {
 
 void Category::AddAppender(Appender * appender) {
 	if (appender) {
-		Mutex::ScopedLock lock(appenders_mutex_);
-		(*appender_map_)[appender->GetName()] = appender;
+		Common::CMutex::ScopedLock lock(appenders_mutex_);
+		appender_map_[appender->GetName()] = appender;
 	} else {
 		throw std::invalid_argument("appender is nullptr");
 	}
 }
 
 Appender * Category::GetAppender() const {
-	Mutex::ScopedLock lock(appenders_mutex_);
-	auto it = appender_map_->begin();
-	if (it == appender_map_->end()) {
+	Common::CMutex::ScopedLock lock(appenders_mutex_);
+	auto got = appender_map_.begin();
+	if (got == appender_map_.end()) {
 		return nullptr;
 	} else {
-		return it->second;
+		return got->second;
 	}
 }
 
-Appender * Category::GetAppender(const Common::SDString & name) const {
-	Mutex::ScopedLock lock(appenders_mutex_);
-	auto it = appender_map_->find(name);
-	if (it == appender_map_->end()) {
+Appender * Category::GetAppender(const i8 * name) const {
+	Common::CMutex::ScopedLock lock(appenders_mutex_);
+	auto got = appender_map_.find(Common::SDString(name));
+	if (got == appender_map_.end()) {
 		return nullptr;
 	} else {
-		return it->second;
+		return got->second;
 	}
 }
 
 void Category::RemoveAllAppenders() {
-	Mutex::ScopedLock lock(appenders_mutex_);
-	appender_map_->clear();
+	Common::CMutex::ScopedLock lock(appenders_mutex_);
+	appender_map_.clear();
 }
 
 void Category::RemoveAppender(Appender * appender) {
 	if (appender) {
-		Mutex::ScopedLock lock(appenders_mutex_);
-		appender_map_->erase(appender->GetName());
+		Common::CMutex::ScopedLock lock(appenders_mutex_);
+		appender_map_.erase(appender->GetName());
 	} else {
 		throw std::invalid_argument("appender is nullptr");
 	}
@@ -118,9 +117,9 @@ void Category::RemoveAppender(Appender * appender) {
 
 void Category::CallAppenders(const Record & record) {
 	{
-		Mutex::ScopedLock lock(appenders_mutex_);
-		if (!appender_map_->empty()) {
-			for (auto & it : *appender_map_) {
+		Common::CMutex::ScopedLock lock(appenders_mutex_);
+		if (!appender_map_.empty()) {
+			for (auto & it : appender_map_) {
 				it.second->DoAppend(record);
 			}
 		}
@@ -147,12 +146,11 @@ const Category * Category::GetParent() const {
 }
 
 void Category::_Log(Priority::Value priority, const i8 * format, va_list arguments) {
-	_Log(priority, StringUtil::FormatVa(format, arguments));
+	_Log(priority, Common::SDString::FormatVa(format, arguments));
 }
 
 void Category::_Log(Priority::Value priority, const Common::SDString & message) {
-	Record record(GetName(), message, priority);
-	CallAppenders(record);
+	CallAppenders(Record(*GetName(), *message, priority));
 }
 
 void Category::Log(Priority::Value priority, const i8 * format, ...) {

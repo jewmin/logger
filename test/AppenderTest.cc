@@ -40,7 +40,7 @@ public:
 
 	virtual void TearDown() override {
 		for (i32 i = 0; i < 3; ++i) {
-			Logger::Appender * appender = Logger::Appender::GetAppender(Common::SDString::Format("appender%d", i));
+			Logger::Appender * appender = Logger::Appender::GetAppender(*Common::SDString::Format("appender%d", i));
 			if (appender) {
 				delete appender;
 			}
@@ -69,10 +69,10 @@ TEST_F(AppenderTest, close) {
 }
 
 TEST_F(AppenderTest, get) {
-	EXPECT_TRUE(Logger::Appender::GetAppender(Common::SDString("appender0")) != nullptr);
-	EXPECT_TRUE(Logger::Appender::GetAppender(Common::SDString("appender1")) != nullptr);
-	EXPECT_TRUE(Logger::Appender::GetAppender(Common::SDString("appender2")) != nullptr);
-	EXPECT_TRUE(Logger::Appender::GetAppender(Common::SDString("appender3")) == nullptr);
+	EXPECT_TRUE(Logger::Appender::GetAppender("appender0") != nullptr);
+	EXPECT_TRUE(Logger::Appender::GetAppender("appender1") != nullptr);
+	EXPECT_TRUE(Logger::Appender::GetAppender("appender2") != nullptr);
+	EXPECT_TRUE(Logger::Appender::GetAppender("appender3") == nullptr);
 }
 
 TEST_F(AppenderTest, del) {

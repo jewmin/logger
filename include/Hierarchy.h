@@ -25,17 +25,20 @@
 #ifndef Logger_Hierarchy_INCLUDED
 #define Logger_Hierarchy_INCLUDED
 
+#include "Common.h"
+#include "CObject.h"
 #include "Mutex.h"
 #include "Category.h"
+#include "SDString.h"
 
 namespace Logger {
 
-class Hierarchy {
+class Hierarchy : public Common::CObject {
 public:
 	~Hierarchy();
 
-	Category * GetExistingCategory(const std::string & name);
-	Category * GetCategory(const std::string & name);
+	Category * GetExistingCategory(const Common::SDString & name);
+	Category * GetCategory(const Common::SDString & name);
 	void Shutdown();
 	void DeleteAllCategories();
 
@@ -44,8 +47,8 @@ public:
 protected:
 	Hierarchy();
 
-	Category * _GetExistingCategory(const std::string & name);
-	Category * _GetCategory(const std::string & name);
+	Category * _GetExistingCategory(const Common::SDString & name);
+	Category * _GetCategory(const Common::SDString & name);
 
 private:
 	Hierarchy(Hierarchy &&) = delete;
@@ -54,8 +57,8 @@ private:
 	Hierarchy & operator=(const Hierarchy &) = delete;
 
 protected:
-	std::unordered_map<std::string, Category *> * category_map_;
-	mutable Mutex category_mutex_;
+	std::map<const Common::SDString, Category *> category_map_;
+	mutable Common::CMutex category_mutex_;
 };
 
 }
