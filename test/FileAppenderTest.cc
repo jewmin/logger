@@ -100,7 +100,10 @@ TEST(FileAppenderTest, reopen) {
 }
 
 TEST(FileAppenderTest, reopen_error) {
-	Logger::FileAppender file("FileAppenderTest", "......");
+	i8 filename[300];
+	std::memset(filename, 'a', 299);
+	filename[299] = 0;
+	Logger::FileAppender file("FileAppenderTest", filename);
 	EXPECT_EQ(file.ReOpen(), false);
 	EXPECT_EQ(file.GetMode(), static_cast<mode_t>(00644));
 	EXPECT_EQ(file.GetAppend(), true);
@@ -175,7 +178,10 @@ TEST(RollingFileAppenderTest, wait) {
 }
 
 TEST(RollingFileAppenderTest, error) {
-	Logger::RollingFileAppender roll("RollingFileAppenderTest", "......", false, 30, 3);
+	i8 filename[300];
+	std::memset(filename, 'a', 299);
+	filename[299] = 0;
+	Logger::RollingFileAppender roll("RollingFileAppenderTest", filename, false, 30, 3);
 	roll.SetMaxBackupIndex(0);
 	roll.RollOver();
 }
@@ -220,6 +226,9 @@ TEST(DailyRollingFileAppenderTest, wait) {
 }
 
 TEST(DailyRollingFileAppenderTest, error) {
-	Logger::DailyRollingFileAppender daily("DailyRollingFileAppenderTest", "......", false);
+	i8 filename[300];
+	std::memset(filename, 'a', 299);
+	filename[299] = 0;
+	Logger::DailyRollingFileAppender daily("DailyRollingFileAppenderTest", filename, false);
 	daily.RollOver();
 }
