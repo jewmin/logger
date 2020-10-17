@@ -198,6 +198,10 @@ private:
 PatternLayout::PatternLayout() {
 }
 
+PatternLayout::PatternLayout(const i8 * conversion_pattern) {
+	SetConversionPattern(conversion_pattern);
+}
+
 PatternLayout::~PatternLayout() {
 	ClearConversionPattern();
 }

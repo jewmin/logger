@@ -36,6 +36,7 @@ namespace Logger {
 class COMMON_EXTERN PatternLayout : public Layout {
 public:
 	PatternLayout();
+	explicit PatternLayout(const i8 * conversion_pattern);
 	virtual ~PatternLayout();
 
 	/*

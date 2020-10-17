@@ -43,6 +43,7 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/include/Appender/FileAppender.h
 	${PROJECT_SOURCE_DIR}/include/Appender/RollingFileAppender.h
 	${PROJECT_SOURCE_DIR}/include/Appender/DailyRollingFileAppender.h
+	${PROJECT_SOURCE_DIR}/include/Appender/StreamAppender.h
 	${PROJECT_SOURCE_DIR}/include/Hierarchy.h
 	${PROJECT_SOURCE_DIR}/include/Category.h
 
@@ -58,6 +59,7 @@ SET(srcs
 	${PROJECT_SOURCE_DIR}/src/Appender/FileAppender.cc
 	${PROJECT_SOURCE_DIR}/src/Appender/RollingFileAppender.cc
 	${PROJECT_SOURCE_DIR}/src/Appender/DailyRollingFileAppender.cc
+	${PROJECT_SOURCE_DIR}/src/Appender/StreamAppender.cc
 	${PROJECT_SOURCE_DIR}/src/Hierarchy.cc
 	${PROJECT_SOURCE_DIR}/src/Category.cc
 )

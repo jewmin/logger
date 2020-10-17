@@ -34,6 +34,14 @@ TEST_F(LayoutTest, empty_pattern) {
 	EXPECT_STREQ(*pattern.Format(record), "");
 }
 
+TEST_F(LayoutTest, ctor_pattern) {
+	Logger::Record record("LayoutTest", "test pattern layout", Logger::Priority::kInfo);
+	record.time_stamp_ = test_time_;
+	Logger::PatternLayout pattern("%m%n");
+	EXPECT_STREQ(pattern.GetConversionPattern(), "%m%n");
+	EXPECT_STREQ(*pattern.Format(record), "test pattern layout\n");
+}
+
 TEST_F(LayoutTest, basic_pattern) {
 	Logger::Record record("LayoutTest", "test pattern layout", Logger::Priority::kInfo);
 	record.time_stamp_ = test_time_;
