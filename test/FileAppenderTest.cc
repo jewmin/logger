@@ -5,6 +5,7 @@
 #include "Appender/FileAppender.h"
 #include "Appender/RollingFileAppender.h"
 #include "Appender/DailyRollingFileAppender.h"
+#include "Appender/StreamAppender.h"
 
 class MockAsyncAppender : public Logger::AppenderSkeleton {
 public:
@@ -231,4 +232,14 @@ TEST(DailyRollingFileAppenderTest, error) {
 	filename[299] = 0;
 	Logger::DailyRollingFileAppender daily("DailyRollingFileAppenderTest", filename, false);
 	daily.RollOver();
+}
+
+TEST(StreamAppenderTest, sync) {
+	Logger::StreamAppender sync("StreamAppenderTest", false);
+	sync.DoAppend(Logger::Record("StreamAppender", "this is a sync stream message", Logger::Priority::kInfo));
+}
+
+TEST(StreamAppenderTest, async) {
+	Logger::StreamAppender async("StreamAppenderTest", true);
+	async.DoAppend(Logger::Record("StreamAppender", "this is a async stream message", Logger::Priority::kInfo));
 }
